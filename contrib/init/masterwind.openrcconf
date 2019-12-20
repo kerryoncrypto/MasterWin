@@ -1,0 +1,26 @@
+# /etc/conf.d/masterwind: config file for /etc/init.d/masterwind
+
+# Config file location
+#BITCOIND_CONFIGFILE="/etc/masterwin/masterwin.conf"
+
+# What directory to write pidfile to?  (created and owned by $BITCOIND_USER)
+#BITCOIND_PIDDIR="/var/run/masterwind"
+
+# What filename to give the pidfile
+#BITCOIND_PIDFILE="${BITCOIND_PIDDIR}/masterwind.pid"
+
+# Where to write masterwind data (be mindful that the blockchain is large)
+#BITCOIND_DATADIR="/var/lib/masterwind"
+
+# User and group to own masterwind process
+#BITCOIND_USER="masterwin"
+#BITCOIND_GROUP="masterwin"
+
+# Path to masterwind executable
+#BITCOIND_BIN="/usr/bin/masterwind"
+
+# Nice value to run masterwind under
+#BITCOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+BITCOIND_OPTS=""

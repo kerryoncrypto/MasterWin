@@ -1,0 +1,26 @@
+[Unit]
+Description=MasterWin's distributed currency daemon
+After=network.target
+
+[Service]
+User=masterwin
+Group=masterwin
+
+Type=forking
+PIDFile=/var/lib/masterwind/masterwind.pid
+
+ExecStart=/usr/bin/masterwind -daemon -pid=/var/lib/masterwind/masterwind.pid \
+          -conf=/etc/masterwin/masterwin.conf -datadir=/var/lib/masterwind
+
+ExecStop=-/usr/bin/masterwin-cli -conf=/etc/masterwin/masterwin.conf \
+         -datadir=/var/lib/masterwind stop
+
+Restart=always
+PrivateTmp=true
+TimeoutStopSec=60s
+TimeoutStartSec=2s
+StartLimitInterval=120s
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
