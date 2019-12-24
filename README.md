@@ -31,3 +31,21 @@ COIN INFO
 - [BitcoinTalk:  Announcements:](https://bitcointalk.org/index.php?topic=5210569) 
 - [Discord](https://discord.gg/XbnbzC2)
 - [Twitter](https://twitter.com/master__win)
+- [Reddit](https://www.reddit.com/r/MasterWin)
+
+Exchange
+- [DelionDEX](https://dex.delion.online/market/DELION.MW_DELION.BTC)
+
+Masternode Sharing
+- [Ihostmn](https://millenniumclub.ca)
+- [Masternode Community](http://masternode.community)
+- [Millenium Club](https://millenniumclub.ca)
+
+Masternode Hosting
+- [Ihostmn](https://ihostmn.com
+- [Masternode](Community http://masternode.community)
+- [Millenium Club](https://millenniumclub.ca)
+
+Masternode List
+- [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW)
+- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw)
