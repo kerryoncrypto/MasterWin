@@ -40,11 +40,13 @@ Masternode Sharing
 - [Ihostmn](https://millenniumclub.ca)
 - [Masternode Community](http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
+- [simplepospool SPP](https://simplepospool.com/)
 
 Masternode Hosting
 - [Ihostmn](https://ihostmn.com
 - [Masternode](Community http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
+- [simplepospool SPP](https://simplepospool.com/)
 
 Masternode List
 - [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW)
