@@ -34,6 +34,10 @@ COIN INFO
 - [Reddit](https://www.reddit.com/r/MasterWin)
 
 Exchange
+Graviex:
+https://graviex.net/markets/mwbtc
+https://graviex.net/markets/mwltc
+https://graviex.net/markets/mwdoge
 - [DelionDEX](https://dex.delion.online/market/DELION.MW_DELION.BTC)
 
 Masternode Sharing
