@@ -32,6 +32,7 @@ COIN INFO
 - [Discord](https://discord.gg/XbnbzC2)
 - [Twitter](https://twitter.com/master__win)
 - [Reddit](https://www.reddit.com/r/MasterWin)
+- [Telegram](https://t.me/masterwinofficial)
 
 Exchange
 - [Graviex MW/BTC](https://graviex.net/markets/mwbtc)
@@ -54,3 +55,13 @@ Masternode Hosting
 Masternode List
 - [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW)
 - [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw)
+
+COIN info
+- [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)
+- [Coincodex](https://coincodex.com/crypto/masterwin)
+- [Coingecko](https://www.coingecko.com/en/coins/masterwin)
+- [Coinstats](https://coinstats.app/en/coins/masterwin)
+- [Coincost](http://coincost.net/en/currency/masterwin)
+- [Coingolive](https://coingolive.com/en/coins/masterwin)
+- [Globalcoinlisting](https://globalcoinlisting.com/currency/masterwin)
+- [delta](https://delta.app/en/crypto/mw/masterwincoin)
