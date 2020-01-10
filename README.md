@@ -82,4 +82,4 @@ COIN info
 - [Moonstats](https://www.moonstats.com/mw-masterwin)
 - [Rates.ninja](https://rates.ninja/cryptocurrency/masterwin)
 - [Forbino](https://forbino.com/pl/kursy/masterwin/)
-- [Cryptoporto](https://cryptoporto.com/
+- [Cryptoporto](https://cryptoporto.com/)
