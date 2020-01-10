@@ -27,8 +27,9 @@ COIN INFO
 
 
 ### Links
-- [Official Website](https://masterwin.online/) 
-- [BitcoinTalk:  Announcements:](https://bitcointalk.org/index.php?topic=5210569) 
+- [Official Website](https://masterwin.online/)
+- [Masternodes.online](https://masternodes.online/currencies/MW/)
+- [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) 
 - [Discord](https://discord.gg/XbnbzC2)
 - [Twitter](https://twitter.com/master__win)
 - [Reddit](https://www.reddit.com/r/MasterWin)
@@ -51,8 +52,11 @@ Masternode Hosting
 - [Masternode](Community http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
 - [simplepospool SPP](https://simplepospool.com/)
+- [Trittium](https://node.trittium.cc) 
+- [Flits mobile app](https://flitsnode.app/download)
 
 Masternode List
+- [Masternode.buzz](https://coins.masternode.buzz/MW/)
 - [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW)
 - [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw)
 
@@ -65,3 +69,17 @@ COIN info
 - [Coingolive](https://coingolive.com/en/coins/masterwin)
 - [Globalcoinlisting](https://globalcoinlisting.com/currency/masterwin)
 - [delta](https://delta.app/en/crypto/mw/masterwincoin)
+- [CMC.IO](https://cmc.io/coins/masterwin/)
+- [Livecryptotracking](http://livecryptotracking.com/currency/masterwin/)
+- [Athcoinindex](https://athcoinindex.com/coin/masterwin)
+- [Cryptotophost](https://cryptotophost.com/coin/mw)
+- [Coinranking](https://coinranking.com/coin/F7GShh8J+masterwin-mw)
+- [Tradetwist](https://tradetwist.com/currency/masterwin)
+- [Starttrading](https://starttrading.com/currencies/masterwin/)
+- [Blockchaintd](https://blockchaintd.com/prices/masterwin)
+- [Coinatomy](http://coinatomy.com/currency/masterwin)
+- [Cryptolist.club](https://cryptolist.club/currency/masterwin)
+- [Moonstats](https://www.moonstats.com/mw-masterwin)
+- [Rates.ninja](https://rates.ninja/cryptocurrency/masterwin)
+- [Forbino](https://forbino.com/pl/kursy/masterwin/)
+- [Cryptoporto](https://cryptoporto.com/
