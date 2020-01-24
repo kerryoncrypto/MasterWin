@@ -29,6 +29,7 @@ COIN INFO
 ### Links
 - [Official Website](https://masterwin.online/)
 - [Masternodes.online](https://masternodes.online/currencies/MW/)
+- [Midas platform/InstantBuy](https://p.midas.investments/)
 - [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) 
 - [Discord](https://discord.gg/XbnbzC2)
 - [Twitter](https://twitter.com/master__win)
