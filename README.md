@@ -42,11 +42,11 @@ Exchange
 - [DelionDEX](https://dex.delion.online/market/DELION.MW_DELION.BTC)
 
 Youtube English
-https://youtu.be/SMHkSNHyhwY
-https://www.youtube.com/watch?v=CF4RJmvRWIA
+- https://youtu.be/SMHkSNHyhwY
+- https://www.youtube.com/watch?v=CF4RJmvRWIA
 Youtube Español
-https://www.youtube.com/watch?v=NHFrz9yCEdo
-https://www.youtube.com/watch?v=LE2xcJHjdnA
+- https://www.youtube.com/watch?v=NHFrz9yCEdo
+- https://www.youtube.com/watch?v=LE2xcJHjdnA
 
 Masternode Sharing
 - [Ihostmn](https://millenniumclub.ca)
