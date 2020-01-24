@@ -41,11 +41,19 @@ Exchange
 - [Graviex MW/DOGE](https://graviex.net/markets/mwdoge)
 - [DelionDEX](https://dex.delion.online/market/DELION.MW_DELION.BTC)
 
+Youtube English
+https://youtu.be/SMHkSNHyhwY
+https://www.youtube.com/watch?v=CF4RJmvRWIA
+Youtube Español
+https://www.youtube.com/watch?v=NHFrz9yCEdo
+https://www.youtube.com/watch?v=LE2xcJHjdnA
+
 Masternode Sharing
 - [Ihostmn](https://millenniumclub.ca)
 - [Masternode Community](http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
 - [simplepospool SPP](https://simplepospool.com/)
+- [crypos](https://crypos.io/)
 
 Masternode Hosting
 - [Ihostmn](https://ihostmn.com
@@ -54,6 +62,7 @@ Masternode Hosting
 - [simplepospool SPP](https://simplepospool.com/)
 - [Trittium](https://node.trittium.cc) 
 - [Flits mobile app](https://flitsnode.app/download)
+- [crypos](https://crypos.io/)
 
 Masternode List
 - [Masternode.buzz](https://coins.masternode.buzz/MW/)
