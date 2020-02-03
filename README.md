@@ -40,7 +40,10 @@ Exchange
 - [Graviex MW/BTC](https://graviex.net/markets/mwbtc)
 - [Graviex MW/LTC](https://graviex.net/markets/mwltc)
 - [Graviex MW/DOGE](https://graviex.net/markets/mwdoge)
-- [DelionDEX](https://dex.delion.online/market/DELION.MW_DELION.BTC)
+- [Midas MW/BTC](https://midas.investments/exchange/MW/BTC)
+- [DelionDEX MW/BTC](https://dex.delion.online/market/DELION.MW_DELION.BTC)
+- [DelionDEX MW/DLN](https://dex.delion.online/market/DELION.MW_DELION.DLN)
+- [DelionDEX MW/DOGE](https://dex.delion.online/market/DELION.MW_DELION.DOGE)
 
 Youtube English
 - https://youtu.be/SMHkSNHyhwY
