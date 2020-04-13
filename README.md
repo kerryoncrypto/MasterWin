@@ -35,7 +35,7 @@ Masternode Sharing
 - [crypos](https://crypos.io/)
 
 Masternode Hosting
-- [Ihostmn](https://ihostmn.com
+- [Ihostmn](https://ihostmn.com)
 - [Masternode](Community http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
 - [simplepospool SPP](https://simplepospool.com/)
