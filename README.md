@@ -1,15 +1,6 @@
-### Links
-- [Official Website](https://masterwin.online/)
-- [Masternodes.online](https://masternodes.online/currencies/MW/)
-- [Midas platform/InstantBuy](https://p.midas.investments/)
-- [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) 
-- [Discord](https://discord.gg/XbnbzC2)
-- [Twitter](https://twitter.com/master__win)
-- [Reddit](https://www.reddit.com/r/MasterWin)
-- [Telegram](https://t.me/masterwinofficial)
-
 Exchange
 - [Crex24 MW/BTC](https://crex24.com/exchange/MW-BTC)
+- [SouthXchange](https://www.southxchange.com/Market/Book/MW/BTC)
 - [Graviex MW/BTC](https://graviex.net/markets/mwbtc)
 - [Graviex MW/LTC](https://graviex.net/markets/mwltc)
 - [Graviex MW/DOGE](https://graviex.net/markets/mwdoge)
@@ -17,6 +8,16 @@ Exchange
 - [DelionDEX MW/BTC](https://dex.delion.online/market/DELION.MW_DELION.BTC)
 - [DelionDEX MW/DLN](https://dex.delion.online/market/DELION.MW_DELION.DLN)
 - [DelionDEX MW/DOGE](https://dex.delion.online/market/DELION.MW_DELION.DOGE)
+
+Links
+- [Official Website](https://masterwin.online/)
+- [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/)
+- [Masternodes.online](https://masternodes.online/currencies/MW/)
+- [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) 
+- [Discord](https://discord.gg/XbnbzC2)
+- [Twitter](https://twitter.com/master__win)
+- [Reddit](https://www.reddit.com/r/MasterWin)
+- [Telegram](https://t.me/masterwinofficial)
 
 Youtube English
 - https://youtu.be/SMHkSNHyhwY
