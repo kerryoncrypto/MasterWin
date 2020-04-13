@@ -45,6 +45,9 @@ Masternode Hosting
 
 Masternode List
 - [Masternode.buzz](https://coins.masternode.buzz/MW/)
+- [mnodes.pro](https://mnodes.pro/masterwin-masternode-information.php)
+- [Nodecheck](https://nodecheck.io/currency/MW)
+- [Pecuniaplatform](https://pecuniaplatform.io/coin-details/Masterwin)
 - [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW)
 - [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw)
 
