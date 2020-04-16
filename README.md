@@ -19,6 +19,12 @@ Links
 - [Reddit](https://www.reddit.com/r/MasterWin)
 - [Telegram](https://t.me/masterwinofficial)
 
+Explorer
+- [Explorer 1](http://185.58.226.136:3001/) 
+- [Explorer 2](http://91.208.184.185:3001/) 
+- [Explorer 3](http://46.173.218.227:3001/) 
+- [Explorer 4](https://chains.tretium.cc/MW/blocks) 
+
 Youtube English
 - https://youtu.be/SMHkSNHyhwY
 - https://www.youtube.com/watch?v=CF4RJmvRWIA
@@ -27,18 +33,12 @@ Youtube Español
 - https://www.youtube.com/watch?v=NHFrz9yCEdo
 - https://www.youtube.com/watch?v=LE2xcJHjdnA
 
-Masternode Sharing
-- [Ihostmn](https://millenniumclub.ca)
+Masternode Sharing | Hosting
+- [Cryptoselfmade](http://cryptoselfmade.com/?ref=1076cYhXemp7z1)
 - [Masternode Community](http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
 - [simplepospool SPP](https://simplepospool.com/)
-- [crypos](https://crypos.io/)
-
-Masternode Hosting
 - [Ihostmn](https://ihostmn.com)
-- [Masternode Community](http://masternode.community)
-- [Millenium Club](https://millenniumclub.ca)
-- [simplepospool SPP](https://simplepospool.com/)
 - [Trittium](https://node.trittium.cc) 
 - [Flits mobile app](https://flitsnode.app/download)
 - [crypos](https://crypos.io/)
