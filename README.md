@@ -25,7 +25,7 @@ Explorer
 - [Explorer 3](http://46.173.218.227:3001/) 
 - [Explorer 4](https://chains.tretium.cc/MW/blocks) 
 
-Polispay APP gift cards and MasterCard
+Polispay APP Gift Cards and MasterCard
 - [Polispay](https://www.polispay.com/)
 - [Android apps](https://play.google.com/store/apps/details?id=com.polispay.copay)
 
