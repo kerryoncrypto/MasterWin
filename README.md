@@ -9,7 +9,7 @@ Exchange
 - [DelionDEX MW/DLN](https://dex.delion.online/market/DELION.MW_DELION.DLN)
 - [DelionDEX MW/DOGE](https://dex.delion.online/market/DELION.MW_DELION.DOGE)
 
-Links
+OFFICIAL LINKS:
 - [Official Website](https://masterwin.online/)
 - [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/)
 - [Masternodes.online](https://masternodes.online/currencies/MW/)
@@ -25,16 +25,15 @@ Explorer
 - [Explorer 3](http://46.173.218.227:3001/) 
 - [Explorer 4](https://chains.tretium.cc/MW/blocks) 
 
-Youtube English
-- https://youtu.be/SMHkSNHyhwY
-- https://www.youtube.com/watch?v=CF4RJmvRWIA
-
-Youtube Español
-- https://www.youtube.com/watch?v=NHFrz9yCEdo
-- https://www.youtube.com/watch?v=LE2xcJHjdnA
+Polispay APP gift cards and MasterCard
+- [Polispay](https://www.polispay.com/)
+- [Android apps](https://play.google.com/store/apps/details?id=com.polispay.copay)
 
 Masternode Sharing | Hosting
 - [Cryptoselfmade](http://cryptoselfmade.com/?ref=1076cYhXemp7z1)
+- [StackOfStake](https://stackofstake.com/)
+- [Polisnodes](https://platform.polisnodes.io/coins)
+- [Gentarium](https://gtmcoin.io/)
 - [Masternode Community](http://masternode.community)
 - [Millenium Club](https://millenniumclub.ca)
 - [simplepospool SPP](https://simplepospool.com/)
