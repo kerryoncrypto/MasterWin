@@ -11,7 +11,7 @@ Exchange:
 
 OFFICIAL LINKS:
 - [Official Website](https://masterwin.online/) ![Alt text](https://masterwin.online/github/701893309475455177.png? "Official Website")
-- [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/) ![Alt text](https://masterwin.online/github/703836693282947142.png? "CoinMarketCap")
+- [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/) ![Alt text](https://masterwin.online/github/c.png? "CoinMarketCap")
 - [Masternodes.online](https://masternodes.online/currencies/MW/) ![Alt text](https://masterwin.online/github/607530120437039104.png? "Masternodes.online")
 - [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) ![Alt text](https://masterwin.online/github/702868607100780564.png? "Announcements") 
 - [Discord](https://discord.gg/XbnbzC2) ![Alt text](https://masterwin.online/github/702868164752703488.png? "Discord")
