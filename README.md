@@ -51,7 +51,7 @@ MASTERNODE ROI INFO:
 - [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw) ![Alt text](https://masterwin.online/github/703836699691843676.png? "Vaultwach")
 
 COIN info:
-- [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)
+- [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)s
 - [Coincodex](https://coincodex.com/crypto/masterwin)
 - [Coingecko](https://www.coingecko.com/en/coins/masterwin)
 - [Coinstats](https://coinstats.app/en/coins/masterwin)
