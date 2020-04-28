@@ -48,7 +48,7 @@ MASTERNODE ROI INFO:
 - [Nodecheck](https://nodecheck.io/currency/MW) ![Alt text](https://masterwin.online/github/703836700899541074.png? "Nodecheck")
 - [Pecuniaplatform](https://pecuniaplatform.io/coin-details/Masterwin) ![Alt text](https://masterwin.online/github/p.png? "Pecuniaplatform")
 - [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW) ![Alt text](https://masterwin.online/github/703836697829441638.png? "Masternodes.biz")
-- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw) ![Alt text](https://masterwin.online/github/703836699691843676.png? "Vaultwach")
+- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw) ![Alt text](https://masterwin.online/github/v.png? "Vaultwach")
 
 COIN info:
 - [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)
