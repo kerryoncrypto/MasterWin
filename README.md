@@ -1,4 +1,4 @@
-Exchange
+Exchange:
 - [Crex24 MW/BTC](https://crex24.com/exchange/MW-BTC) ![Alt text](https://masterwin.online/github/702868454700482590.png? "Crex24")
 - [SouthXchange](https://www.southxchange.com/Market/Book/MW/BTC) ![Alt text](https://masterwin.online/github/703836695946068019.png? "SouthXchange")
 - [Graviex MW/BTC](https://graviex.net/markets/mwbtc) ![Alt text](https://masterwin.online/github/703836702308827146.png? "Graviex")
@@ -10,7 +10,6 @@ Exchange
 - [DelionDEX MW/DOGE](https://dex.delion.online/market/DELION.MW_DELION.DOGE) ![Alt text](https://masterwin.online/github/703836701151199242.png? "DelionDEX")
 
 OFFICIAL LINKS:
-
 - [Official Website](https://masterwin.online/) ![Alt text](https://masterwin.online/github/701893309475455177.png? "Official Website")
 - [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/) ![Alt text](https://masterwin.online/github/703836693282947142.png? "CoinMarketCap")
 - [Masternodes.online](https://masternodes.online/currencies/MW/) ![Alt text](https://masterwin.online/github/607530120437039104.png? "Masternodes.online")
@@ -19,18 +18,18 @@ OFFICIAL LINKS:
 - [Twitter](https://twitter.com/master__win) ![Alt text](https://masterwin.online/github/702868356352704512.png? "Twitter")
 - [Telegram](https://t.me/masterwinofficial) ![Alt text](https://masterwin.online/github/702868304620159076.png? "Telegram")
 
-Explorer
+Explorer:
 - [Explorer 1](http://mw.polispay.com/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
 - [Explorer 2](http://185.58.226.136:3001/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
 - [Explorer 3](http://91.208.184.185:3001/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
 - [Explorer 4](http://46.173.218.227:3001/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
 - [Explorer 5](https://chains.tretium.cc/MW/blocks) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
 
-Polispay APP Gift Cards and MasterCard
+Polispay APP Gift Cards and MasterCard:
 - [Polispay](https://www.polispay.com/) ![Alt text](https://masterwin.online/github/703836702539644979.png? "Polispay") 
 - [Android apps](https://play.google.com/store/apps/details?id=com.polispay.copay) ![Alt text](https://masterwin.online/github/goggle.png? "Polispay Android") 
 
-Masternode Sharing | Hosting
+Masternode Sharing | Hosting:
 - [Cryptoselfmade](http://cryptoselfmade.com/?ref=1076cYhXemp7z1) ![Alt text](https://masterwin.online/github/703836690187550811.png? "Cryptoselfmade") 
 - [StackOfStake](https://stackofstake.com/) ![Alt text](https://masterwin.online/github/704692407933075487.png? "StackOfStake") 
 - [Polisnodes](https://platform.polisnodes.io/coins) ![Alt text](https://masterwin.online/github/704249243941994516.png? "Polisnodes") 
@@ -43,15 +42,15 @@ Masternode Sharing | Hosting
 - [Flits mobile app](https://flitsnode.app/download) ![Alt text](https://masterwin.online/github/703836687188361237.png? "Flits") 
 - [crypos](https://crypos.io/) ![Alt text](https://masterwin.online/github/703836702011162654.png? "crypos") 
 
-Masternode List
-- [Masternode.buzz](https://coins.masternode.buzz/MW/)
-- [mnodes.pro](https://mnodes.pro/masterwin-masternode-information.php)
-- [Nodecheck](https://nodecheck.io/currency/MW)
-- [Pecuniaplatform](https://pecuniaplatform.io/coin-details/Masterwin)
-- [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW)
-- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw)
+MASTERNODE ROI INFO:
+- [Masternode.buzz](https://coins.masternode.buzz/MW/) ![Alt text](https://masterwin.online/github/703836670554013707.png? "Masternode.buzz")
+- [mnodes.pro](https://mnodes.pro/masterwin-masternode-information.php) ![Alt text](https://masterwin.online/github/703836703978160130.png? "mnodes.pro")
+- [Nodecheck](https://nodecheck.io/currency/MW) ![Alt text](https://masterwin.online/github/703836700899541074.png? "Nodecheck")
+- [Pecuniaplatform](https://pecuniaplatform.io/coin-details/Masterwin) ![Alt text](https://masterwin.online/github/703840457678913586.png? "Pecuniaplatform")
+- [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW) ![Alt text](https://masterwin.online/github/703836697829441638.png? "Masternodes.biz")
+- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw) ![Alt text](https://masterwin.online/github/703836699691843676.png? "Vaultwach")
 
-COIN info
+COIN info:
 - [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)
 - [Coincodex](https://coincodex.com/crypto/masterwin)
 - [Coingecko](https://www.coingecko.com/en/coins/masterwin)
@@ -75,13 +74,7 @@ COIN info
 - [Forbino](https://forbino.com/pl/kursy/masterwin/)
 - [Cryptoporto](https://cryptoporto.com/)
 
-### Masterwin Specification
-
-[Logo](https://masterwin.online/assets/img/logo-top.png)
-
 ### Coin Info
-
-[Coin Info](https://masterwin.online/assets/img/coininfo.png)
 
 COIN INFO
 <table>
@@ -99,7 +92,5 @@ COIN INFO
 </table>
 
 ### Block Rewards
-
-[Reward](https://masterwin.online/assets/img/REWARD.png)
 
 
