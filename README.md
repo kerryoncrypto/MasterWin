@@ -11,7 +11,7 @@ Exchange:
 
 OFFICIAL LINKS:
 - [Official Website](https://masterwin.online/) ![Alt text](https://masterwin.online/github/701893309475455177.png? "Official Website")
-- [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/) ![Alt text](https://masterwin.online/github/703836693282947142.png? "CoinMarketCap")
+- [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/) ![Alt text](https://masterwin.online/github/703836693282947142.jng? "CoinMarketCap")
 - [Masternodes.online](https://masternodes.online/currencies/MW/) ![Alt text](https://masterwin.online/github/607530120437039104.png? "Masternodes.online")
 - [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) ![Alt text](https://masterwin.online/github/702868607100780564.png? "Announcements") 
 - [Discord](https://discord.gg/XbnbzC2) ![Alt text](https://masterwin.online/github/702868164752703488.png? "Discord")
@@ -43,15 +43,15 @@ Masternode Sharing | Hosting:
 - [crypos](https://crypos.io/) ![Alt text](https://masterwin.online/github/703836702011162654.png? "crypos") 
 
 MASTERNODE ROI INFO:
-- [Masternode.buzz](https://coins.masternode.buzz/MW/) ![Alt text](https://masterwin.online/github/703836670554013707.png? "Masternode.buzz")
+- [Masternode.buzz](https://coins.masternode.buzz/MW/) ![Alt text](https://masterwin.online/github/703836670554013707.jng? "Masternode.buzz")
 - [mnodes.pro](https://mnodes.pro/masterwin-masternode-information.php) ![Alt text](https://masterwin.online/github/703836703978160130.png? "mnodes.pro")
 - [Nodecheck](https://nodecheck.io/currency/MW) ![Alt text](https://masterwin.online/github/703836700899541074.png? "Nodecheck")
 - [Pecuniaplatform](https://pecuniaplatform.io/coin-details/Masterwin) ![Alt text](https://masterwin.online/github/703840457678913586.png? "Pecuniaplatform")
 - [Masternodes.biz](http://masternodes.biz/coindetail.php?c=MW) ![Alt text](https://masterwin.online/github/703836697829441638.png? "Masternodes.biz")
-- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw) ![Alt text](https://masterwin.online/github/703836699691843676.png? "Vaultwach")
+- [Vaultwach](https://www.vaultwatch.eu/detail.php?coin=mw) ![Alt text](https://masterwin.online/github/703836699691843676.jng? "Vaultwach")
 
 COIN info:
-- [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)s
+- [Coinpaprika](https://coinpaprika.com/coin/mw-masterwin)
 - [Coincodex](https://coincodex.com/crypto/masterwin)
 - [Coingecko](https://www.coingecko.com/en/coins/masterwin)
 - [Coinstats](https://coinstats.app/en/coins/masterwin)
