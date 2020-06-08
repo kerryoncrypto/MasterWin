@@ -2417,7 +2417,7 @@ För att aktivera AutoMint ändra 'enablezeromint=0' till 'enablezeromint=1' i m
         <translation>SEKRETESS</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>Mata in en mängd MW att konvertera till zmw</translation>
     </message>
     <message>
@@ -4773,7 +4773,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Välj zmw att Spendera</translation>

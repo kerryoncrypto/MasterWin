@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -301,19 +301,19 @@ void PrivacyDialog::on_pushButtonSpendzmw_clicked()
     sendzmw();
 }
 
-void PrivacyDialog::on_pushButtonZPscsControl_clicked()
+void PrivacyDialog::on_pushButtonZMWControl_clicked()
 {
     if (!walletModel || !walletModel->getOptionsModel())
         return;
 
-    ZPscsControlDialog* zPscsControl = new ZPscsControlDialog(this);
-    zPscsControl->setModel(walletModel);
-    zPscsControl->exec();
+    ZMWControlDialog* zMWControl = new ZMWControlDialog(this);
+    zMWControl->setModel(walletModel);
+    zMWControl->exec();
 }
 
-void PrivacyDialog::setZPscsControlLabels(int64_t nAmount, int nQuantity)
+void PrivacyDialog::setZMWControlLabels(int64_t nAmount, int nQuantity)
 {
-    ui->labelzPscsSelected_int->setText(QString::number(nAmount));
+    ui->labelzMWSelected_int->setText(QString::number(nAmount));
     ui->labelQuantitySelected_int->setText(QString::number(nQuantity));
 }
 
@@ -422,8 +422,8 @@ void PrivacyDialog::sendzmw()
     // use mints from zmw selector if applicable
     vector<CMintMeta> vMintsToFetch;
     vector<CZerocoinMint> vMintsSelected;
-    if (!ZPscsControlDialog::setSelectedMints.empty()) {
-        vMintsToFetch = ZPscsControlDialog::GetSelectedMints();
+    if (!ZMWControlDialog::setSelectedMints.empty()) {
+        vMintsToFetch = ZMWControlDialog::GetSelectedMints();
 
         for (auto& meta : vMintsToFetch) {
             if (meta.nVersion < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
@@ -495,8 +495,8 @@ void PrivacyDialog::sendzmw()
     }
 
     // Clear zmw selector in case it was used
-    ZPscsControlDialog::setSelectedMints.clear();
-    ui->labelzPscsSelected_int->setText(QString("0"));
+    ZMWControlDialog::setSelectedMints.clear();
+    ui->labelzMWSelected_int->setText(QString("0"));
     ui->labelQuantitySelected_int->setText(QString("0"));
 
     // Some statistics for entertainment
@@ -514,7 +514,7 @@ void PrivacyDialog::sendzmw()
 
     CAmount nValueOut = 0;
     for (const CTxOut& txout: wtxNew.vout) {
-        strStats += tr("value out: ") + FormatMoney(txout.nValue).c_str() + " Pscs, ";
+        strStats += tr("value out: ") + FormatMoney(txout.nValue).c_str() + " MW, ";
         nValueOut += txout.nValue;
 
         strStats += tr("address: ");

@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -2113,7 +2113,7 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
             //add to our stake set
             nAmountSelected += out.tx->vout[out.i].nValue;
 
-            std::unique_ptr<CPscsStake> input(new CPscsStake());
+            std::unique_ptr<CMWStake> input(new CMWStake());
             input->SetInput((CTransaction) *out.tx, out.i);
             listInputs.emplace_back(std::move(input));
         }
@@ -3016,7 +3016,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
             //Mark mints as spent
             if (stakeInput->IsZMW()) {
-                CZPscsStake* z = (CZPscsStake*)stakeInput.get();
+                CZMWStake* z = (CZMWStake*)stakeInput.get();
                 if (!z->MarkSpent(this, txNew.GetHash()))
                     return error("%s: failed to mark mint as used\n", __func__);
             }
@@ -4514,7 +4514,7 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransa
     }
 
     //any change that is less than 0.0100000 will be ignored and given as an extra fee
-    //also assume that a zerocoinspend that is minting the change will not have any change that goes to Pscs
+    //also assume that a zerocoinspend that is minting the change will not have any change that goes to MW
     CAmount nChange = nValueIn - nTotalValue; // Fee already accounted for in nTotalValue
     if (nChange > 1 * CENT && !isZCSpendChange) {
         // Fill a vout to ourself using the largest contributing address
@@ -5042,7 +5042,7 @@ string CWallet::GetUniqueWalletBackupName(bool fzmwAuto) const
     return strprintf("wallet%s.dat%s", fzmwAuto ? "-autozmwbackup" : "", DateTimeStrFormat(".%Y-%m-%d-%H-%M", GetTime()));
 }
 
-void CWallet::ZPscsBackupWallet()
+void CWallet::ZMWBackupWallet()
 {
     filesystem::path backupDir = GetDataDir() / "backups";
     filesystem::path backupPath;
@@ -5150,7 +5150,7 @@ string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, vector<CDetermin
 
     //Create a backup of the wallet
     if (fBackupMints)
-        ZPscsBackupWallet();
+        ZMWBackupWallet();
 
     return "";
 }
@@ -5172,7 +5172,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, int nSecurityLevel, CWalletTx& wtxN
     }
 
     if (fMintChange && fBackupMints)
-        ZPscsBackupWallet();
+        ZMWBackupWallet();
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
     if (!CommitTransaction(wtxNew, reserveKey)) {

@@ -2441,8 +2441,8 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in masterwin.
         <translation>КОНФИДЕНЦИАЛЬНОСТЬ</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
-        <translation>Введите сумму в Pscs для  конвертации в zmw</translation>
+        <source>Enter an amount of MW to convert to zmw</source>
+        <translation>Введите сумму в MW для  конвертации в zmw</translation>
     </message>
     <message>
         <source>zmw Control</source>
@@ -4856,7 +4856,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Выберите zmw чтобы потратить</translation>
@@ -6266,7 +6266,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Value is below the smallest available denomination (= 1) of zmw</source>
-        <translation>Значение ниже наименьшего доступного номинала (= 1) zPscs</translation>
+        <translation>Значение ниже наименьшего доступного номинала (= 1) zMW</translation>
     </message>
     <message>
         <source>Value more than Obfuscation pool maximum allows.</source>

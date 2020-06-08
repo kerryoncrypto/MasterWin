@@ -2376,7 +2376,7 @@ Pour activer Auto-monnayage, changez 'enablezeromint = 0' en 'enablezeromint = 1
         <translation>CONFIDENTIALITÉ</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>Entrez un montant de MW à convertir en zmw</translation>
     </message>
     <message>
@@ -4388,7 +4388,7 @@ Soit monnayer des dénominations plus élevées (moins d'intrants sont nécessai
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Quantity</source>
         <translation>Quantité </translation>

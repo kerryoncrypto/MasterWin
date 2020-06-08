@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -47,7 +47,7 @@ public:
 
     void setModel(WalletModel* model);
     void showOutOfSyncWarning(bool fShow);
-    void setZPscsControlLabels(int64_t nAmount, int nQuantity);
+    void setZMWControlLabels(int64_t nAmount, int nQuantity);
 
 public slots:
     void setBalance(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance, 
@@ -102,7 +102,7 @@ private slots:
     void on_pushButtonMintReset_clicked();
     void on_pushButtonSpentReset_clicked();
     void on_pushButtonSpendzmw_clicked();
-    void on_pushButtonZPscsControl_clicked();
+    void on_pushButtonZMWControl_clicked();
     void on_pushButtonHideDenoms_clicked();
     void on_pushButtonShowDenoms_clicked();
     void on_pasteButton_clicked();

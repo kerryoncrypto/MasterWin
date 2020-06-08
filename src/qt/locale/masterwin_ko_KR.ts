@@ -2441,7 +2441,7 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in masterwin.
         <translation>프라이버시</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>zmw로 변환할 MW 수량을 입력하세요.</translation>
     </message>
     <message>
@@ -4858,7 +4858,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>사용할 zmw 선택</translation>

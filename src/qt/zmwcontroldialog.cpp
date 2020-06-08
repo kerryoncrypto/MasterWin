@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,12 +13,12 @@
 using namespace std;
 using namespace libzerocoin;
 
-std::set<std::string> ZPscsControlDialog::setSelectedMints;
-std::set<CMintMeta> ZPscsControlDialog::setMints;
+std::set<std::string> ZMWControlDialog::setSelectedMints;
+std::set<CMintMeta> ZMWControlDialog::setMints;
 
-ZPscsControlDialog::ZPscsControlDialog(QWidget *parent) :
+ZMWControlDialog::ZMWControlDialog(QWidget *parent) :
     QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
-    ui(new Ui::ZPscsControlDialog),
+    ui(new Ui::ZMWControlDialog),
     model(0)
 {
     ui->setupUi(this);
@@ -32,19 +32,19 @@ ZPscsControlDialog::ZPscsControlDialog(QWidget *parent) :
     connect(ui->pushButtonAll, SIGNAL(clicked()), this, SLOT(ButtonAllClicked()));
 }
 
-ZPscsControlDialog::~ZPscsControlDialog()
+ZMWControlDialog::~ZMWControlDialog()
 {
     delete ui;
 }
 
-void ZPscsControlDialog::setModel(WalletModel *model)
+void ZMWControlDialog::setModel(WalletModel *model)
 {
     this->model = model;
     updateList();
 }
 
 //Update the tree widget
-void ZPscsControlDialog::updateList()
+void ZMWControlDialog::updateList()
 {
     // need to prevent the slot from being called each time something is changed
     ui->treeWidget->blockSignals(true);
@@ -129,7 +129,7 @@ void ZPscsControlDialog::updateList()
 }
 
 // Update the list when a checkbox is clicked
-void ZPscsControlDialog::updateSelection(QTreeWidgetItem* item, int column)
+void ZMWControlDialog::updateSelection(QTreeWidgetItem* item, int column)
 {
     // only want updates from non top level items that are available to spend
     if (item->parent() && column == COLUMN_CHECKBOX && !item->isDisabled()){
@@ -151,7 +151,7 @@ void ZPscsControlDialog::updateSelection(QTreeWidgetItem* item, int column)
 }
 
 // Update the Quantity and Amount display
-void ZPscsControlDialog::updateLabels()
+void ZMWControlDialog::updateLabels()
 {
     int64_t nAmount = 0;
     for (const CMintMeta& mint : setMints) {
@@ -160,14 +160,14 @@ void ZPscsControlDialog::updateLabels()
     }
 
     //update this dialog's labels
-    ui->labelZPscs_int->setText(QString::number(nAmount));
+    ui->labelZMW_int->setText(QString::number(nAmount));
     ui->labelQuantity_int->setText(QString::number(setSelectedMints.size()));
 
     //update PrivacyDialog labels
-    privacyDialog->setZPscsControlLabels(nAmount, setSelectedMints.size());
+    privacyDialog->setZMWControlLabels(nAmount, setSelectedMints.size());
 }
 
-std::vector<CMintMeta> ZPscsControlDialog::GetSelectedMints()
+std::vector<CMintMeta> ZMWControlDialog::GetSelectedMints()
 {
     std::vector<CMintMeta> listReturn;
     for (const CMintMeta& mint : setMints) {
@@ -179,7 +179,7 @@ std::vector<CMintMeta> ZPscsControlDialog::GetSelectedMints()
 }
 
 // select or deselect all of the mints
-void ZPscsControlDialog::ButtonAllClicked()
+void ZMWControlDialog::ButtonAllClicked()
 {
     ui->treeWidget->blockSignals(true);
     Qt::CheckState state = Qt::Checked;

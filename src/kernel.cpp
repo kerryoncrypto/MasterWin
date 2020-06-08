@@ -1,6 +1,6 @@
 // Copyright (c) 2012-2013 The PPCoin developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -359,7 +359,7 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
         if (spend.getSpendType() != libzerocoin::SpendType::STAKE)
             return error("%s: spend is using the wrong SpendType (%d)", __func__, (int)spend.getSpendType());
 
-        stake = std::unique_ptr<CStakeInput>(new CZPscsStake(spend));
+        stake = std::unique_ptr<CStakeInput>(new CZMWStake(spend));
     } else {
         // First try finding the previous transaction in database
         uint256 hashBlock;
@@ -371,7 +371,7 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
         if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0)))
             return error("CheckProofOfStake() : VerifySignature failed on coinstake %s", tx.GetHash().ToString().c_str());
 
-        CPscsStake* MWInput = new CPscsStake();
+        CMWStake* MWInput = new CMWStake();
         MWInput->SetInput(txPrev, txin.prevout.n);
         stake = std::unique_ptr<CStakeInput>(MWInput);
     }

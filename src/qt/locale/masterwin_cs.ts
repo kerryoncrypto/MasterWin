@@ -2395,7 +2395,7 @@ Prosím zkontrolujte adresu a zkuste to znovu.</translation>
     </message>
     </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>

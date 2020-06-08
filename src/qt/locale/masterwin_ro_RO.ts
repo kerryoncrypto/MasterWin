@@ -189,7 +189,7 @@
     </message>
     </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     </context>
 <context>
     <name>masterwin-core</name>

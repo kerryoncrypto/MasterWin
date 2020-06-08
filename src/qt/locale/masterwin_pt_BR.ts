@@ -3635,7 +3635,7 @@ https://www.transifex.com/masterwin-project/masterwin-project-translations</tran
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Quantity</source>
         <translation>Quantia</translation>

@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -31,7 +31,7 @@ public:
 // zmwStake can take two forms
 // 1) the stake candidate, which is a zcmint that is attempted to be staked
 // 2) a staked zmw, which is a zcspend that has successfully staked
-class CZPscsStake : public CStakeInput
+class CZMWStake : public CStakeInput
 {
 private:
     uint32_t nChecksum;
@@ -40,7 +40,7 @@ private:
     uint256 hashSerial;
 
 public:
-    explicit CZPscsStake(libzerocoin::CoinDenomination denom, const uint256& hashSerial)
+    explicit CZMWStake(libzerocoin::CoinDenomination denom, const uint256& hashSerial)
     {
         this->denom = denom;
         this->hashSerial = hashSerial;
@@ -48,7 +48,7 @@ public:
         fMint = true;
     }
 
-    explicit CZPscsStake(const libzerocoin::CoinSpend& spend);
+    explicit CZMWStake(const libzerocoin::CoinSpend& spend);
 
     CBlockIndex* GetIndexFrom() override;
     bool GetTxFrom(CTransaction& tx) override;
@@ -64,13 +64,13 @@ public:
     uint32_t GetChecksum();
 };
 
-class CPscsStake : public CStakeInput
+class CMWStake : public CStakeInput
 {
 private:
     CTransaction txFrom;
     unsigned int nPosition;
 public:
-    CPscsStake()
+    CMWStake()
     {
         this->pindexFrom = nullptr;
     }

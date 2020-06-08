@@ -2267,7 +2267,7 @@ Nesubrendusios: patvirtintos, bet mažiau nei 1 konvertacijos to pačio nominalo
     </message>
     <message>
         <source>zmw Control</source>
-        <translation>zPscs Kontrolė</translation>
+        <translation>zMW Kontrolė</translation>
     </message>
     <message>
         <source>zmw Selected:</source>
@@ -3449,7 +3449,7 @@ Nesubrendusios: patvirtintos, bet mažiau nei 1 konvertacijos tos pačio nominal
     </message>
     </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>

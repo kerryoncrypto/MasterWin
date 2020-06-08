@@ -1281,7 +1281,7 @@ MultiSend: %1</translation>
     </message>
     </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     </context>
 <context>
     <name>masterwin-core</name>

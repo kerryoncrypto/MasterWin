@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QSettings>
 #include <QTimer>
-
+#include <QtNetwork>
 #define DECORATION_SIZE 48
 #define ICON_OFFSET 16
 #define NUM_ITEMS 9
@@ -193,6 +193,12 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelBalancez->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, availableTotalBalance, false, BitcoinUnits::separatorAlways));
     ui->labelTotalz->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, sumTotalBalance, false, BitcoinUnits::separatorAlways));
 
+    QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+
+    connect(manager, SIGNAL(finished(QNetworkReply*)),
+            this, SLOT(syncRequestFinished(QNetworkReply*)));
+
+    manager->get(QNetworkRequest(QUrl("https://api.coingecko.com/api/v3/coins/masterwin?localization=false")));  
 
     // Adjust bubble-help according to AutoMint settings
 	QString automintHelp = tr("Current percentage of zmw.\nIf AutoMint is enabled this percentage will settle around the configured AutoMint percentage (default = 10%).\n");
@@ -213,7 +219,6 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
 	bool showWatchOnlyMWAvailable = showMWAvailable || nAvailableWatchBalance != nTotalWatchBalance;
 	ui->labelBalanceText->setVisible(showMWAvailable || showWatchOnlyMWAvailable);
 	ui->labelBalance->setVisible(showMWAvailable || showWatchOnlyMWAvailable);
-	ui->labelWatchAvailable->setVisible(showWatchOnlyMWAvailable && showWatchOnly);
 
 	// MW Pending
 	bool showMWPending = settingShowAllBalances || unconfirmedBalance != 0;
@@ -336,3 +341,44 @@ void OverviewPage::showOutOfSyncWarning(bool fShow)
     ui->labelWalletStatus->setVisible(fShow);
     ui->labelTransactionsStatus->setVisible(fShow);
 }
+//GET Price from Gecko
+void OverviewPage::syncRequestFinished(QNetworkReply *reply)
+{
+    //market_data / current_price / usd
+
+    if (reply->error() == QNetworkReply::NoError)
+    {
+        QByteArray strReply =  reply->readAll();
+  
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(strReply);
+        if(jsonResponse.isEmpty())
+        {
+            ui->labelPricez->setText("NON");
+            return;
+        }
+        
+        QJsonObject jsonObject = jsonResponse.object();
+
+            QJsonObject sett3 = jsonObject["market_data"].toObject();
+            QJsonDocument doc(sett3);
+            QByteArray strJson(doc.toJson(QJsonDocument::Compact));
+ 
+            QJsonObject sett4 = sett3["current_price"].toObject();
+            QJsonDocument doc1(sett4);
+            QByteArray strJson1(doc1.toJson(QJsonDocument::Compact));
+
+            float priceVal =  sett4["usd"].toVariant().toFloat();
+            float totalBalance = currentBalance/100000000;
+
+            QString unitPrice = QString::number(priceVal) + QString(" USD");
+            QString totalPrice = QString::number(priceVal* totalBalance) + QString(" USD");
+
+            ui->labelPricez->setText(totalPrice);  
+            ui->labelUSDPricez->setText(unitPrice);
+
+    }    
+    else{
+        ui->labelPricez->setText("NULL");
+    }
+    delete reply;
+}																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																														 

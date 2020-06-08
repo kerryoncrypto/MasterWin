@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -91,6 +91,7 @@ public:
     const std::vector<CAddress>& FixedSeeds() const { return vFixedSeeds; }
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
     int PoolMaxTransactions() const { return nPoolMaxTransactions; }
+    std::set<std::string> BlacklistedAddresses() const { return blacklistedAddresses; }
 
     /** Spork key and Masternode Handling **/
     std::string SporkKey() const { return strSporkKey; }
@@ -151,6 +152,7 @@ protected:
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
+    std::set<std::string> blacklistedAddresses; 
     CBaseChainParams::Network networkID;
     std::string strNetworkID;
     CBlock genesis;

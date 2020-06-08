@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -2974,7 +2974,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 	pindex->nMoneySupply = nMoneySupplyPrev + nValueOut - nValueIn;
 	pindex->nMint = pindex->nMoneySupply - nMoneySupplyPrev + nFees;
 
-	//    LogPrintf("XX69----------> ConnectBlock(): nValueOut: %s, nValueIn: %s, nFees: %s, nMint: %s zPscsSpent: %s\n",
+	//    LogPrintf("XX69----------> ConnectBlock(): nValueOut: %s, nValueIn: %s, nFees: %s, nMint: %s zMWSpent: %s\n",
 	//              FormatMoney(nValueOut), FormatMoney(nValueIn),
 	//              FormatMoney(nFees), FormatMoney(pindex->nMint), FormatMoney(nAmountZerocoinSpent));
 
@@ -4258,7 +4258,7 @@ bool ContextualCheckZerocoinStake(int nHeight, CStakeInput* stake)
 	if (nHeight < Params().Zerocoin_Block_V2_Start())
 		return error("%s: zmw stake block is less than allowed start height", __func__);
 
-	if (CZPscsStake* zmw = dynamic_cast<CZPscsStake*>(stake)) {
+	if (CZMWStake* zmw = dynamic_cast<CZMWStake*>(stake)) {
 		CBlockIndex* pindexFrom = zmw->GetIndexFrom();
 		if (!pindexFrom)
 			return error("%s: failed to get index associated with zmw stake checksum", __func__);
@@ -4461,8 +4461,8 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
 			// Now that this loop if completed. Check if we have zmw inputs.
 			if (hasZMWInputs) {
-				for (CTxIn zPscsInput : zmwInputs) {
-					CoinSpend spend = TxInToZerocoinSpend(zPscsInput);
+				for (CTxIn zMWInput : zmwInputs) {
+					CoinSpend spend = TxInToZerocoinSpend(zMWInput);
 
 					// First check if the serials were not already spent on the forked blocks.
 					CBigNum coinSerial = spend.getCoinSerialNumber();
@@ -4526,8 +4526,8 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 		}
 		else {
 			if (!isBlockFromFork)
-				for (CTxIn zPscsInput : zmwInputs) {
-					CoinSpend spend = TxInToZerocoinSpend(zPscsInput);
+				for (CTxIn zMWInput : zmwInputs) {
+					CoinSpend spend = TxInToZerocoinSpend(zMWInput);
 					if (!ContextualCheckZerocoinSpend(stakeTxIn, spend, pindex, 0))
 						return state.DoS(100, error("%s: main chain ContextualCheckZerocoinSpend failed for tx %s", __func__,
 							stakeTxIn.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zmw");

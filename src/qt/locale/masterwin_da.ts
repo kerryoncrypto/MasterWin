@@ -2441,8 +2441,8 @@ For at aktivere AutoMint-ændring 'enablezeromint = 0' til 'enablezeromint = 1' 
         <translation>PRIVATLIV</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
-        <translation>Indtast en mængde Pscs for at konvertere til zPscs</translation>
+        <source>Enter an amount of MW to convert to zmw</source>
+        <translation>Indtast en mængde MW for at konvertere til zMW</translation>
     </message>
     <message>
         <source>zmw Control</source>
@@ -4553,11 +4553,11 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     </message>
     <message>
         <source>Spent zmw</source>
-        <translation>Brugt zPscs</translation>
+        <translation>Brugt zMW</translation>
     </message>
     <message>
         <source>Received MW from zmw</source>
-        <translation>Modtaget Pscs fra zPscs</translation>
+        <translation>Modtaget MW fra zMW</translation>
     </message>
     <message>
         <source>Minted Change as zmw from zmw Spend</source>
@@ -4784,7 +4784,7 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     </message>
     <message>
         <source>Received MW from zmw</source>
-        <translation>Modtaget Pscs fra zPscs</translation>
+        <translation>Modtaget MW fra zMW</translation>
     </message>
     <message>
         <source>Zerocoin Spend, Change in zmw</source>
@@ -4856,7 +4856,7 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Vælg zmw for at bruge</translation>
@@ -4939,7 +4939,7 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     </message>
     <message>
         <source>Enable automatic wallet backups triggered after each zmw minting (0-1, default: %u)</source>
-        <translation>Aktivér automatiske wallet-sikkerhedskopier udløst efter hver zPscs-mintning (0-1, standard: %u)</translation>
+        <translation>Aktivér automatiske wallet-sikkerhedskopier udløst efter hver zMW-mintning (0-1, standard: %u)</translation>
     </message>
     <message>
         <source>Enable or disable staking functionality for MW inputs (0-1, default: %u)</source>

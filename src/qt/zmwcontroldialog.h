@@ -1,5 +1,5 @@
 // Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -15,16 +15,16 @@ class CZerocoinMint;
 class WalletModel;
 
 namespace Ui {
-class ZPscsControlDialog;
+class ZMWControlDialog;
 }
 
-class ZPscsControlDialog : public QDialog
+class ZMWControlDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit ZPscsControlDialog(QWidget *parent);
-    ~ZPscsControlDialog();
+    explicit ZMWControlDialog(QWidget *parent);
+    ~ZMWControlDialog();
 
     void setModel(WalletModel* model);
 
@@ -33,7 +33,7 @@ public:
     static std::vector<CMintMeta> GetSelectedMints();
 
 private:
-    Ui::ZPscsControlDialog *ui;
+    Ui::ZMWControlDialog *ui;
     WalletModel* model;
     PrivacyDialog* privacyDialog;
 

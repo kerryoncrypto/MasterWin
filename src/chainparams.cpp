@@ -2,7 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -194,9 +194,8 @@ public:
         fHeadersFirstSyncingActive = false;
 
         nPoolMaxTransactions = 3;
-        strSporkKey = "04791ea72907e595e4f55ac6cd2d6662e36b2ff4f212adb85034c6af04d19b75ed4b9ae640c70c7a14f024baf774d61f294330b6b612240f3f3d86c63f223ee31a";
-        strSporkKeyOld = "04791ea72907e595e4f55ac6cd2d6662e36b2ff4f212adb85034c6af04d19b75ed4b9ae640c70c7a14f024baf774d61f294330b6b612240f3f3d86c63f223ee31a";
-        strObfuscationPoolDummyAddress = "CRw1YnjGGy75CPEELoRdHfUqhvMPWTwPNL";
+        strSporkKey = "0400994128f49c097b6911500a0f40fd6f0886f716d2f56100f375f3977c9efc7756271d36315abaa10cdf97a00c013d6efd8852d7da0b79becbff96436c05f419";
+        strObfuscationPoolDummyAddress = "M8XZERVkVmBcr7XVVtErbRuERMh6kfuJd7";
         nStartMasternodePayments = 1576849275; // Wednesday, June 12, 2019 8:00:00 AM GMT
 
         /** Zerocoin */
@@ -215,6 +214,9 @@ public:
         nZerocoinRequiredStakeDepth = 200; //The required confirmations for a zmw to be stakable
 
         nBudget_Fee_Confirmations = 6; // Number of confirmations for the finalization fee
+        blacklistedAddresses = std::set<std::string>{
+            "MUqGH9fvKxjSSJhLQuKMM1yD8EsuZnc6P3",
+        };
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -294,9 +296,8 @@ public:
         fTestnetToBeDeprecatedFieldRPC = false;
 
         nPoolMaxTransactions = 2;
-        strSporkKey = "04A8B319388C0F8588D238B9941DC26B26D3F9465266B368A051C5C100F79306A557780101FE2192FE170D7E6DEFDCBEE4C8D533396389C0DAFFDBC842B002243C";
-        strSporkKeyOld = "04348C2F50F90267E64FACC65BFDC9D0EB147D090872FB97ABAE92E9A36E6CA60983E28E741F8E7277B11A7479B626AC115BA31463AC48178A5075C5A9319D4A38";
-        strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
+        strSporkKey = "0400994128f49c097b6911500a0f40fd6f0886f716d2f56100f375f3977c9efc7756271d36315abaa10cdf97a00c013d6efd8852d7da0b79becbff96436c05f419";
+        strObfuscationPoolDummyAddress = "M8XZERVkVmBcr7XVVtErbRuERMh6kfuJd7";
         nStartMasternodePayments = 1576238087; //Fri, 09 Jan 2015 21:05:58 GMT
         nBudget_Fee_Confirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short
                                        // here because we only have a 8 block finalization window on testnet

@@ -1,7 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -99,7 +99,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
                 isminetype mine = wallet->IsMine(txout);
                 TransactionRecord sub(hash, nTime);
                 sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-                sub.type = TransactionRecord::ZerocoinSpend_Change_zPscs;
+                sub.type = TransactionRecord::ZerocoinSpend_Change_zMW;
                 sub.address = mapValue["zerocoinmint"];
                 if (!fFeeAssigned) {
                     sub.debit -= (wtx.GetZerocoinSpent() - wtx.GetValueOut());
@@ -316,7 +316,7 @@ bool IsZMWType(TransactionRecord::Type type)
         case TransactionRecord::ZerocoinMint:
         case TransactionRecord::ZerocoinSpend:
         case TransactionRecord::RecvFromZerocoinSpend:
-        case TransactionRecord::ZerocoinSpend_Change_zPscs:
+        case TransactionRecord::ZerocoinSpend_Change_zMW:
         case TransactionRecord::ZerocoinSpend_FromMe:
             return true;
         default:

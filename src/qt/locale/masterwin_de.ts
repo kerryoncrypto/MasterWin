@@ -2433,7 +2433,7 @@ Um das automatische Prägen zu aktivieren ändere 'enablezeromint=0' zu 'enablez
         <translation>PRIVATSPHÄRE</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>Geben Sie den Betrag ein, den sie von MW in zmw umwandeln möchten</translation>
     </message>
     <message>
@@ -4848,7 +4848,7 @@ Präge entweder höhere Stückelungen (damit weniger Eingaben benötigt werdenn)
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Wählen Sie die zmw aus, die Sie ausgeben möchten</translation>

@@ -2442,8 +2442,8 @@ Para habilitar AutoMint cambie 'enablezeromint = 0' a 'enablezeromint = 1' en ma
         <translation>PRIVACIDAD</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
-        <translation>Introduzca la cantidad de MW que desea convertir a zPscs</translation>
+        <source>Enter an amount of MW to convert to zmw</source>
+        <translation>Introduzca la cantidad de MW que desea convertir a zMW</translation>
     </message>
     <message>
         <source>zmw Control</source>
@@ -4857,7 +4857,7 @@ O mint las denominaciones más altas (por lo tanto, se necesitan menos datos) o 
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Selecciona zmw para Gastar</translation>

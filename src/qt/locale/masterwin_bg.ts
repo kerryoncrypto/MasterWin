@@ -2430,7 +2430,7 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in masterwin.
         <translation>КОНФИДЕНЦИАЛНОСТ</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>Въведете колко MW  да се конвертират в zmw</translation>
     </message>
     <message>
@@ -4845,7 +4845,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Изберете zmw за Изпращане</translation>

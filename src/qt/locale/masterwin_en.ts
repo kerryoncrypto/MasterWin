@@ -3098,7 +3098,7 @@ To enable AutoMint change &apos;enablezeromint=0&apos; to &apos;enablezeromint=1
     <message>
         <location line="+182"/>
         <location line="+52"/>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6224,7 +6224,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <location filename="../forms/zmwcontroldialog.ui" line="+20"/>
         <source>Select zmw to Spend</source>

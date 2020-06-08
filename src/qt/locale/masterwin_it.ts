@@ -1961,7 +1961,7 @@ Per attivare il Conio automatico cambiare 'enablezeromint=0' in 'enablezeromint=
         <translation>PRIVACY</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>Immetti un importo di MW da convertire in zmw</translation>
     </message>
     <message>
@@ -2666,7 +2666,7 @@ Per cambiare la percentuale (riavvio non necessario):
     </message>
     </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>

@@ -2442,8 +2442,8 @@ Da biste omogućili, promjenite postavke AutoMint 'enablezeromint=0' na 'enablez
         <translation>PRIVATNOST</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
-        <translation>Unesite iznos Pscs za pretvorbu u zmw</translation>
+        <source>Enter an amount of MW to convert to zmw</source>
+        <translation>Unesite iznos MW za pretvorbu u zmw</translation>
     </message>
     <message>
         <source>zmw Control</source>
@@ -4858,7 +4858,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Odabrani zmw za utrošiti</translation>

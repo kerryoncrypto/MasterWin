@@ -2442,7 +2442,7 @@ Om AutoMint in te schakelend verander je 'enablezeromint=0' naar 'enablezeromint
         <translation>PRIVACY</translation>
     </message>
     <message>
-        <source>Enter an amount of Pscs to convert to zmw</source>
+        <source>Enter an amount of MW to convert to zmw</source>
         <translation>Vul het aantal MW in om te converteren naar zmw</translation>
     </message>
     <message>
@@ -2479,7 +2479,7 @@ Om AutoMint in te schakelend verander je 'enablezeromint=0' naar 'enablezeromint
 zmw are mature when they have more than 20 confirmations AND more than 2 mints of the same denomination after them were minted</source>
         <translation>Beschikbare (volwwassen en uitgeefbaar) zmw voor besteding
 
-zPscs zijn volwassen wanneer zij meer dan 20 bevestigingen hebben EN meer dan 2 muntages van dezelfde denominaties nadat zij gemunt zijn.</translation>
+zMW zijn volwassen wanneer zij meer dan 20 bevestigingen hebben EN meer dan 2 muntages van dezelfde denominaties nadat zij gemunt zijn.</translation>
     </message>
     <message>
         <source>0 zmw</source>
@@ -4857,7 +4857,7 @@ Ofwel het munten van hogere denominaties (dus minder invoer nodig) of het te bes
     </message>
 </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>Select zmw to Spend</source>
         <translation>Selecteer zmw om te besteden</translation>

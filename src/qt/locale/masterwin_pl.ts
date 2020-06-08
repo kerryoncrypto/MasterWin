@@ -2021,7 +2021,7 @@ https://www.transifex.com/masterwin-project/masterwin-project-translations </tra
     </message>
     </context>
 <context>
-    <name>ZPscsControlDialog</name>
+    <name>ZMWControlDialog</name>
     <message>
         <source>0</source>
         <translation>0</translation>

@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
 // Copyright (c) 2017-2018 The PIVX developers
-// Copyright (c) 2019 The MasterWin developers
+// Copyright (c) 2019-2020 The MasterWin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -23,6 +23,10 @@ class OverviewPage;
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
+class QNetworkAccessManager;
+class QNetworkReply;
+class QSslError;
+class QUrl;
 QT_END_NAMESPACE
 
 /** Overview ("home") page widget */
@@ -58,7 +62,6 @@ private:
     CAmount currentWatchImmatureBalance;
     int nDisplayUnit;
 
-
     TxViewDelegate* txdelegate;
     TransactionFilterProxy* filter;
 
@@ -67,6 +70,7 @@ private slots:
     void handleTransactionClicked(const QModelIndex& index);
     void updateAlerts(const QString& warnings);
     void updateWatchOnlyLabels(bool showWatchOnly);
+    void syncRequestFinished(QNetworkReply *reply);									   
 };
 
 #endif // BITCOIN_QT_OVERVIEWPAGE_H
