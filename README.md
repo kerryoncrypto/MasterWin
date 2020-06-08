@@ -1,4 +1,3 @@
-TEST
 Exchange:
 - [Crex24 MW/BTC](https://crex24.com/exchange/MW-BTC) ![Alt text](https://masterwin.online/github/702868454700482590.png? "Crex24")
 - [SouthXchange](https://www.southxchange.com/Market/Book/MW/BTC) ![Alt text](https://masterwin.online/github/703836695946068019.png? "SouthXchange")
@@ -16,7 +15,7 @@ OFFICIAL LINKS:
 - [Masternodes.online](https://masternodes.online/currencies/MW/) ![Alt text](https://masterwin.online/github/607530120437039104.png? "Masternodes.online")
 - [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) ![Alt text](https://masterwin.online/github/702868607100780564.png? "Announcements") 
 - [Discord](https://discord.gg/XbnbzC2) ![Alt text](https://masterwin.online/github/702868164752703488.png? "Discord")
-- [Twitter](https://twitter.com/master__win) ![Alt text](https://masterwin.online/github/702868356352704512.png? "Twitter")
+- [Twitter](https://twitter.com/MasterwinOnline) ![Alt text](https://masterwin.online/github/702868356352704512.png? "Twitter")
 - [Telegram](https://t.me/masterwinofficial) ![Alt text](https://masterwin.online/github/702868304620159076.png? "Telegram")
 
 Explorer:
