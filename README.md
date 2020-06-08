@@ -1,3 +1,4 @@
+TEST
 Exchange:
 - [Crex24 MW/BTC](https://crex24.com/exchange/MW-BTC) ![Alt text](https://masterwin.online/github/702868454700482590.png? "Crex24")
 - [SouthXchange](https://www.southxchange.com/Market/Book/MW/BTC) ![Alt text](https://masterwin.online/github/703836695946068019.png? "SouthXchange")
