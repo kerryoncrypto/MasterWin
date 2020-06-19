@@ -36,7 +36,6 @@ Masternode Sharing | Hosting:
 - [Gentarium](https://gtmcoin.io/) ![Alt text](https://masterwin.online/github/704694259458244608.png? "Gentarium") 
 - [Masternode Community](http://masternode.community) ![Alt text](https://masterwin.online/github/703836701533011999.png? "Masternode Community") 
 - [Millenium Club](https://millenniumclub.ca) ![Alt text](https://masterwin.online/github/703836696772477018.png? "Millenium Club") 
-- [simplepospool SPP](https://simplepospool.com/) ![Alt text](https://masterwin.online/github/701904971783864320.png? "simplepospool SPP") 
 - [Ihostmn](https://ihostmn.com) ![Alt text](https://masterwin.online/github/703836700631367720.png? "Ihostmn") 
 - [Trittium](https://node.trittium.cc) ![Alt text](https://masterwin.online/github/703836698022510612.png? "Trittium")  
 - [Flits mobile app](https://flitsnode.app/download) ![Alt text](https://masterwin.online/github/703836687188361237.png? "Flits") 
