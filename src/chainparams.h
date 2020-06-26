@@ -191,6 +191,8 @@ protected:
     int nBlockLastGoodCheckpoint;
     int nBlockEnforceInvalidUTXO;
     int nBlockZerocoinV2;
+    
+    std::vector<CAmount> vMasternodeCollateral;
 };
 
 /**
