@@ -209,20 +209,17 @@ void CMasternode::Check(bool forceCheck)
     }
 
     if (!unitTest) {
-        CValidationState state;
-        CMutableTransaction tx = CMutableTransaction();
-        CTxOut vout = CTxOut(3999.99 * COIN, obfuScationPool.collateralPubKey);
-        tx.vin.push_back(vin);
-        tx.vout.push_back(vout);
-
-        {
-            TRY_LOCK(cs_main, lockMain);
-            if (!lockMain) return;
-
-            if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
-                activeState = MASTERNODE_VIN_SPENT;
-                return;
-            }
+        TRY_LOCK (cs_main, lockMain);
+        if (!lockMain)
+            return;
+        
+        CCoinsViewCache cache (pcoinsTip);
+        const CCoins* coins = cache.AccessCoins (vin.prevout.hash);
+        
+        if (!coins || !coins->IsAvailable (vin.prevout.n) || !Params ().isMasternodeCollateral (coins->vout [vin.prevout.n].nValue)) {
+            activeState = MASTERNODE_VIN_SPENT;
+            
+            return;
         }
     }
 
@@ -580,11 +577,6 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     }
 
     CValidationState state;
-    CMutableTransaction tx = CMutableTransaction();
-    CTxOut vout = CTxOut(3999.99 * COIN, obfuScationPool.collateralPubKey);
-    tx.vin.push_back(vin);
-    tx.vout.push_back(vout);
-
     {
         TRY_LOCK(cs_main, lockMain);
         if (!lockMain) {
@@ -594,7 +586,10 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             return false;
         }
 
-        if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
+        CCoinsViewCache cache (pcoinsTip);
+        const CCoins* coins = cache.AccessCoins (vin.prevout.hash);
+        
+        if (!coins || !coins->IsAvailable (vin.prevout.n) || !Params ().isMasternodeCollateral (coins->vout [vin.prevout.n].nValue)) {
             //set nDos
             state.IsInvalid(nDoS);
             return false;

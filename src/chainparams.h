@@ -17,6 +17,7 @@
 
 #include "libzerocoin/Params.h"
 #include <vector>
+#include <boost/foreach.hpp>
 
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 
@@ -127,6 +128,17 @@ public:
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
+    
+    bool isMasternodeCollateral (CAmount nValue) const {
+        // Check if the given value is on collateral-list
+        BOOST_FOREACH (const CAmount& tierCollateral, vMasternodeCollateral) {
+            if (nValue == tierCollateral)
+                return true;
+        }
+        
+        // Cannot be a valid collateral-value if we get here
+        return false;
+    }
 
 protected:
     CChainParams() {}
