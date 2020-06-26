@@ -40,7 +40,7 @@
 #include <net/if.h>
 #include <netdb.h>
 #include <netinet/in.h>
-#include <sys/fcntl.h>
+#include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/socket.h>
 #include <sys/types.h>
