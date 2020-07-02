@@ -1727,16 +1727,16 @@ bool CObfuscationPool::MakeCollateralAmounts()
 
     // try to use non-denominated and not mn-like funds
     bool success = pwalletMain->CreateTransaction(vecSend, wtx, reservekeyChange,
-        nFeeRet, strFail, &coinControl, ONLY_NONDENOMINATED_NOT10000IFMN);
+        nFeeRet, strFail, &coinControl, EXCEPT_DENOMINATED_OR_MASTERNODE_COLLATERAL);
     if (!success) {
         // if we failed (most likeky not enough funds), try to use all coins instead -
         // MN-like funds should not be touched in any case and we can't mix denominated without collaterals anyway
         CCoinControl* coinControlNull = NULL;
-        LogPrintf("MakeCollateralAmounts: ONLY_NONDENOMINATED_NOT10000IFMN Error - %s\n", strFail);
+        LogPrintf("MakeCollateralAmounts: EXCEPT_DENOMINATED_OR_MASTERNODE_COLLATERAL Error - %s\n", strFail);
         success = pwalletMain->CreateTransaction(vecSend, wtx, reservekeyChange,
-            nFeeRet, strFail, coinControlNull, ONLY_NOT15000IFMN);
+            nFeeRet, strFail, coinControlNull, EXCEPT_MASTERNODE_COLLATERAL);
         if (!success) {
-            LogPrintf("MakeCollateralAmounts: ONLY_NOT15000IFMN Error - %s\n", strFail);
+            LogPrintf("MakeCollateralAmounts: EXCEPT_MASTERNODE_COLLATERAL Error - %s\n", strFail);
             reservekeyCollateral.ReturnKey();
             return false;
         }
@@ -1814,7 +1814,7 @@ bool CObfuscationPool::CreateDenominated(CAmount nTotalValue)
 
     CCoinControl* coinControl = NULL;
     bool success = pwalletMain->CreateTransaction(vecSend, wtx, reservekeyChange,
-        nFeeRet, strFail, coinControl, ONLY_NONDENOMINATED_NOT10000IFMN);
+        nFeeRet, strFail, coinControl, EXCEPT_DENOMINATED_OR_MASTERNODE_COLLATERAL);
     if (!success) {
         LogPrintf("CreateDenominated: Error - %s\n", strFail);
         // TODO: return reservekeyDenom here
