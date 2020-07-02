@@ -2000,6 +2000,18 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
 	return ret;
 }
 
+int64_t GetMasternodePayment (int nHeight, unsigned int mnLevel, int64_t blockValue, int nMasternodeCount, bool isZMWStake) {
+	int64_t masternodeTotalPayment = GetMasternodePayment (nHeight, blockValue, nMasternodeCount, isZMWStake);
+	unsigned int masternodeLevels = Params ().getMasterNodeLevels ();
+	unsigned int masternodeLevelSum = 0;
+	
+	for (unsigned int masternodeLevel = 1; masternodeLevel < masternodeLevels; masternodeLevel++)
+		masternodeLevelSum += masternodeLevel;
+	
+	return masternodeTotalPayment * mnLevel / masternodeLevelSum;
+}
+
+
 bool IsInitialBlockDownload()
 {
 	LOCK(cs_main);

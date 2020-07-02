@@ -139,6 +139,10 @@ public:
         // Cannot be a valid collateral-value if we get here
         return false;
     }
+    
+    unsigned int getMasterNodeLevels () const {
+        return vMasternodeCollateral.size ();
+    }
 
 protected:
     CChainParams() {}
