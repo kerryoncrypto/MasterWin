@@ -282,15 +282,6 @@ void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStak
     }
 }
 
-std::string GetRequiredPaymentsString(int nBlockHeight)
-{
-    if (IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS) && budget.IsBudgetPaymentBlock(nBlockHeight)) {
-        return budget.GetRequiredPaymentsString(nBlockHeight);
-    } else {
-        return masternodePayments.GetRequiredPaymentsString(nBlockHeight);
-    }
-}
-
 void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool fZMWStake)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
@@ -583,38 +574,6 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
 
     LogPrint("masternode","CMasternodePayments::IsTransactionValid - Missing required payment of %s to %s\n", FormatMoney(requiredMasternodePayment).c_str(), strPayeesPossible.c_str());
     return false;
-}
-
-std::string CMasternodeBlockPayees::GetRequiredPaymentsString()
-{
-    LOCK(cs_vecPayments);
-
-    std::string ret = "Unknown";
-
-    for (CMasternodePayee& payee : vecPayments) {
-        CTxDestination address1;
-        ExtractDestination(payee.scriptPubKey, address1);
-        CBitcoinAddress address2(address1);
-
-        if (ret != "Unknown") {
-            ret += ", " + address2.ToString() + ":" + std::to_string(payee.nVotes);
-        } else {
-            ret = address2.ToString() + ":" + std::to_string(payee.nVotes);
-        }
-    }
-
-    return ret;
-}
-
-std::string CMasternodePayments::GetRequiredPaymentsString(int nBlockHeight)
-{
-    LOCK(cs_mapMasternodeBlocks);
-
-    if (mapMasternodeBlocks.count(nBlockHeight)) {
-        return mapMasternodeBlocks[nBlockHeight].GetRequiredPaymentsString();
-    }
-
-    return "Unknown";
 }
 
 bool CMasternodePayments::IsTransactionValid(const CTransaction& txNew, int nBlockHeight)

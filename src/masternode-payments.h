@@ -29,7 +29,6 @@ extern CMasternodePayments masternodePayments;
 
 void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight);
-std::string GetRequiredPaymentsString(int nBlockHeight);
 bool IsBlockValueValid(const CBlock& block, CAmount nExpectedValue, CAmount nMinted);
 void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake, bool fZMWStake);
 
@@ -147,7 +146,6 @@ public:
     }
 
     bool IsTransactionValid(const CTransaction& txNew);
-    std::string GetRequiredPaymentsString();
 
     ADD_SERIALIZE_METHODS;
 
@@ -283,7 +281,6 @@ public:
 
     int GetMinMasternodePaymentsProto();
     void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
-    std::string GetRequiredPaymentsString(int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool fZMWStake);
     std::string ToString() const;
     int GetOldestBlock();
