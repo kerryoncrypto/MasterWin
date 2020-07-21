@@ -127,6 +127,19 @@ CMasternode::CMasternode(const CMasternodeBroadcast& mnb)
     lastTimeChecked = 0;
 }
 
+unsigned int CMasternode::GetLevel () {
+    CTransaction prevTx;
+    uint256 hashBlock = 0;
+    
+    if (!GetTransaction (vin.prevout.hash, prevTx, hashBlock, true))
+        return 0;
+    
+    if (vin.prevout.n >= prevout_tx.vout.size ())
+        return 0;
+    
+    return Params ().getMasternodeLevel (prevTx.vout [vin.prevout.n].nValue);
+}
+
 //
 // When a new masternode broadcast is sent, update our information
 //

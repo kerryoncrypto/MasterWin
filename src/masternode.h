@@ -72,7 +72,7 @@ public:
         ss << sigTime;
         return ss.GetHash();
     }
-
+    
     void swap(CMasternodePing& first, CMasternodePing& second) // nothrow
     {
         // enable ADL (not necessary in our case, but good practice)
@@ -149,6 +149,7 @@ public:
     CMasternode(const CMasternode& other);
     CMasternode(const CMasternodeBroadcast& mnb);
 
+    unsigned int GetLevel ();
 
     void swap(CMasternode& first, CMasternode& second) // nothrow
     {
