@@ -143,6 +143,20 @@ public:
     unsigned int getMasternodeLevels () const {
         return vMasternodeCollateral.size ();
     }
+    
+    unsigned int getMasternodeLevel (CAmount collateralValue) const {
+        unsigned int currentLevel = 0;
+        
+        // Check if the given value is on collateral-list
+        BOOST_FOREACH (const CAmount& tierCollateral, vMasternodeCollateral) {
+            currentLevel++;
+            
+            if (collateralValue == tierCollateral)
+                return currentLevel;
+        }
+        
+        return 0;
+    }
 
 protected:
     CChainParams() {}

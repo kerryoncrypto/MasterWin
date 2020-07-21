@@ -285,6 +285,8 @@ bool CActiveMasternode::GetMasterNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secr
     COutput* selectedOutput;
 
     // Find the vin
+    bool found = false;
+    
     if (!strTxHash.empty()) {
         // Let's find it
         uint256 txHash(strTxHash);
@@ -296,26 +298,49 @@ bool CActiveMasternode::GetMasterNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secr
             return false;
         }
 
-        bool found = false;
         BOOST_FOREACH (COutput& out, possibleCoins) {
-            if (out.tx->GetHash() == txHash && out.i == outputIndex) {
+            if ((out.tx->GetHash () == txHash) &&
+                (out.i == outputIndex) &&
+                (Params ().isMasternodeCollateral (out.tx->vout [out.i].nValue))) {
                 selectedOutput = &out;
                 found = true;
                 break;
             }
         }
-        if (!found) {
-            LogPrintf("CActiveMasternode::GetMasterNodeVin - Could not locate valid vin\n");
-            return false;
-        }
     } else {
-        // No output specified,  Select the first one
-        if (possibleCoins.size() > 0) {
-            selectedOutput = &possibleCoins[0];
-        } else {
+        // No output specified,  Select the first usable one
+        if (!possibleCoins.size ()) {
             LogPrintf("CActiveMasternode::GetMasterNodeVin - Could not locate specified vin from possible list\n");
             return false;
         }
+        
+        selectedOutput = &possibleCoins [0];
+        
+        unsigned int selectedLevel = Params ().getMasternodeLevel (selectedOutput->tx->vout [selectedOutput->i].nValue);
+        unsigned int maxLevel = Params ().getMasternodeLevels ();
+        
+        BOOST_FOREACH (COutput& out, possibleCoins) {
+            if (selectedLevel == maxLevel)
+                break;
+            
+            unsigned int nextLevel = Params ().getMasternodeLevel (out.tx->vout [out.i].nValue);
+            
+            if (nextLevel <= selectedLevel)
+                continue;
+            
+            selectedLevel = nextLevel;
+            selectedOutput = &out;
+            found = true;
+        }
+        
+        if (maxLevel < 1)
+            found = false;
+    }
+    
+    if (!found) {
+        LogPrintf("CActiveMasternode::GetMasterNodeVin - Could not locate valid vin\n");
+        
+        return false;
     }
 
     // At this point we have a selected output, retrieve the associated info
