@@ -140,7 +140,7 @@ public:
         return false;
     }
     
-    unsigned int getMasterNodeLevels () const {
+    unsigned int getMasternodeLevels () const {
         return vMasternodeCollateral.size ();
     }
 
