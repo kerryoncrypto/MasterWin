@@ -375,18 +375,27 @@ int CMasternodeMan::stable_size ()
     return nStable_size;
 }
 
-int CMasternodeMan::CountEnabled(int protocolVersion)
-{
-    int i = 0;
-    protocolVersion = protocolVersion == -1 ? masternodePayments.GetMinMasternodePaymentsProto() : protocolVersion;
+int CMasternodeMan::CountEnabled (int protocolVersion) {
+    return CountEnabledOnLevel (0, protocolVersion);
+}
 
+int CMasternodeMan::CountEnabledOnLevel (unsigned int mnLevel, int protocolVersion) {
+    int masternodeCount = 0;
+    
+    protocolVersion = (protocolVersion == -1 ? masternodePayments.GetMinMasternodePaymentsProto () : protocolVersion);
+    
     for (CMasternode& mn : vMasternodes) {
-        mn.Check();
-        if (mn.protocolVersion < protocolVersion || !mn.IsEnabled()) continue;
-        i++;
+        mn.Check ();
+        
+        if (mn.protocolVersion < protocolVersion ||
+            !mn.IsEnabled () ||
+            ((mnLevel > 0) && (mnLevel != mn.GetLevel ())))
+            continue;
+        
+        masternodeCount++;
     }
 
-    return i;
+    return masternodeCount;
 }
 
 void CMasternodeMan::CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion)
@@ -494,7 +503,8 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
         if (mn.protocolVersion < masternodePayments.GetMinMasternodePaymentsProto()) continue;
 
         //it's in the list (up to 8 entries ahead of current block to allow propagation) -- so let's skip it
-        if (masternodePayments.IsScheduled(mn, nBlockHeight)) continue;
+        // TODO: Insert masternode-level
+        if (masternodePayments.IsScheduled (mn, nBlockHeight)) continue;
 
         //it's too new, wait for a cycle
         if (fFilterSigTime && mn.sigTime + (nMnCount * 2.6 * 60) > GetAdjustedTime()) continue;

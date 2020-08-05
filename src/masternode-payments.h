@@ -62,17 +62,26 @@ class CMasternodePayee
 {
 public:
     CScript scriptPubKey;
+    unsigned int masternodeLevel;
     int nVotes;
 
     CMasternodePayee()
     {
         scriptPubKey = CScript();
+        masternodeLevel = 0;
         nVotes = 0;
     }
 
     CMasternodePayee(CScript payee, int nVotesIn)
     {
         scriptPubKey = payee;
+        masternodeLevel = 0;
+        nVotes = nVotesIn;
+    }
+    
+    CMasternodePayee(CScript payee, unsigned int nLevel, int nVotesIn) {
+        scriptPubKey = payee;
+        masternodeLevel = nLevel;
         nVotes = nVotesIn;
     }
 
@@ -82,6 +91,7 @@ public:
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
     {
         READWRITE(scriptPubKey);
+        READWRITE (masternodeLevel);
         READWRITE(nVotes);
     }
 };
@@ -118,6 +128,22 @@ public:
         CMasternodePayee c(payeeIn, nIncrement);
         vecPayments.push_back(c);
     }
+    
+    void AddPayee (CScript payeeIn, unsigned int masternodeLevel, int nIncrement) {
+        LOCK (cs_vecPayments);
+        
+        BOOST_FOREACH (CMasternodePayee& payee, vecPayments) {
+            if ((payee.scriptPubKey == payeeIn) &&
+                (payee.masternodeLevel == masternodeLevel)) {
+                payee.nVotes += nIncrement;
+                
+                return;
+            }
+        }
+        
+        CMasternodePayee c (payeeIn, masternodeLevel, nIncrement);
+        vecPayments.push_back (c);
+    }
 
     bool GetPayee(CScript& payee)
     {
@@ -131,6 +157,22 @@ public:
             }
         }
 
+        return (nVotes > -1);
+    }
+    
+    bool GetPayee (CScript& payee, unsigned int masternodeLevel) {
+        LOCK (cs_vecPayments);
+        
+        int nVotes = -1;
+        
+        BOOST_FOREACH (CMasternodePayee& p, vecPayments) {
+            if ((p.masternodeLevel == masternodeLevel) &&
+                (p.nVotes > nVotes)) {
+                payee = p.scriptPubKey;
+                nVotes = p.nVotes;
+            }
+        }
+        
         return (nVotes > -1);
     }
 
@@ -165,6 +207,7 @@ public:
 
     int nBlockHeight;
     CScript payee;
+    unsigned int masternodeLevel;
     std::vector<unsigned char> vchSig;
 
     CMasternodePaymentWinner()
@@ -172,6 +215,7 @@ public:
         nBlockHeight = 0;
         vinMasternode = CTxIn();
         payee = CScript();
+        masternodeLevel = 0;
     }
 
     CMasternodePaymentWinner(CTxIn vinIn)
@@ -179,6 +223,7 @@ public:
         nBlockHeight = 0;
         vinMasternode = vinIn;
         payee = CScript();
+        masternodeLevel = 0;
     }
 
     uint256 GetHash()
@@ -200,6 +245,11 @@ public:
     {
         payee = payeeIn;
     }
+    
+    void AddPayee (CScript payeeIn, unsigned int mnLevel) {
+        payee = payeeIn;
+        masternodeLevel = mnLevel;
+    }
 
 
     ADD_SERIALIZE_METHODS;
@@ -218,7 +268,7 @@ public:
         std::string ret = "";
         ret += vinMasternode.ToString();
         ret += ", " + boost::lexical_cast<std::string>(nBlockHeight);
-        ret += ", " + payee.ToString();
+        ret += ", " + payee.ToString() + "@" + boost::lexical_cast<std::string>(masternodeLevel);
         ret += ", " + boost::lexical_cast<std::string>((int)vchSig.size());
         return ret;
     }
@@ -261,8 +311,10 @@ public:
     int LastPayment(CMasternode& mn);
 
     bool GetBlockPayee(int nBlockHeight, CScript& payee);
+    bool GetBlockPayee (int nBlockHeight, unsigned mnlevel, CScript& payee);
     bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     bool IsScheduled(CMasternode& mn, int nNotBlockHeight);
+    bool IsScheduled (CMasternode& mn, int mnLevelCount, int nNotBlockHeight);
 
     bool CanVote(COutPoint outMasternode, int nBlockHeight)
     {
@@ -276,6 +328,21 @@ public:
 
         //record this masternode voted
         mapMasternodesLastVote[outMasternode.hash + outMasternode.n] = nBlockHeight;
+        return true;
+    }
+    
+    bool CanVote (const COutPoint& outMasternode, unsigned int mnLevel, int nBlockHeight) {
+        LOCK (cs_mapMasternodePayeeVotes);
+        
+        uint256 key = ((outMasternode.hash + outMasternode.n) << 4) + mnLevel;
+        
+        if (mapMasternodesLastVote.count (key)) {
+            if (mapMasternodesLastVote [key] == nBlockHeight)
+                return false;
+        }
+        
+        mapMasternodesLastVote [key] = nBlockHeight;
+        
         return true;
     }
 
