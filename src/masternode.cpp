@@ -134,7 +134,7 @@ unsigned int CMasternode::GetLevel () {
     if (!GetTransaction (vin.prevout.hash, prevTx, hashBlock, true))
         return 0;
     
-    if (vin.prevout.n >= prevout_tx.vout.size ())
+    if (vin.prevout.n >= prevTx.vout.size ())
         return 0;
     
     return Params ().getMasternodeLevel (prevTx.vout [vin.prevout.n].nValue);
