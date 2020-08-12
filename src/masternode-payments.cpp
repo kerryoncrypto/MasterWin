@@ -289,50 +289,42 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
 
     bool hasPayment = true;
     CScript payee;
-
-    //spork
-    // TODO: Insert masternode-levels
-    if (!masternodePayments.GetBlockPayee (pindexPrev->nHeight + 1, payee)) {
-        //no masternode detected
-        CMasternode* winningNode = mnodeman.GetCurrentMasterNode(1);
-        if (winningNode) {
-            payee = GetScriptForDestination(winningNode->pubKeyCollateralAddress.GetID());
-        } else {
-            LogPrint("masternode","CreateNewBlock: Failed to detect masternode to pay\n");
-            hasPayment = false;
-        }
-    }
-
-    CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
-    CAmount masternodePayment = GetMasternodePayment(pindexPrev->nHeight, blockValue, 0, fZMWStake);
-
-    if (hasPayment) {
-        if (fProofOfStake) {
-            /**For Proof Of Stake vout[0] must be null
-             * Stake reward can be split into many different outputs, so we must
-             * use vout.size() to align with several different cases.
-             * An additional output is appended as the masternode payment
-             */
-            unsigned int i = txNew.vout.size();
-            txNew.vout.resize(i + 1);
-            txNew.vout[i].scriptPubKey = payee;
-            txNew.vout[i].nValue = masternodePayment;
-
-            //subtract mn payment from the stake reward
-            if (!txNew.vout[1].IsZerocoinMint())
-                txNew.vout[i - 1].nValue -= masternodePayment;
-        } else {
-            txNew.vout.resize(2);
-            txNew.vout[1].scriptPubKey = payee;
-            txNew.vout[1].nValue = masternodePayment;
-            txNew.vout[0].nValue = blockValue - masternodePayment;
+    
+    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+        hasPayment = true;
+        
+        if (!masternodePayments.GetBlockPayee (pindexPrev->nHeight + 1, masternodeLevel, payee)) {
+            // No masternode was detected
+            // TODO: This is missing the level
+            CMasternode* winningNode = mnodeman.GetCurrentMasterNode (1);
+            
+            if (!winningNode) {
+                LogPrint ("masternode", "CreateNewBlock: Failed to detect masternode to pay\n");
+                hasPayment = false;
+            } else
+                payee = GetScriptForDestination (winningNode->pubKeyCollateralAddress.GetID ());
         }
 
-        CTxDestination address1;
-        ExtractDestination(payee, address1);
-        CBitcoinAddress address2(address1);
-
-        LogPrint("masternode","Masternode payment of %s to %s\n", FormatMoney(masternodePayment).c_str(), address2.ToString().c_str());
+        CAmount blockValue = GetBlockValue (pindexPrev->nHeight);
+        CAmount masternodePayment = GetMasternodePayment (pindexPrev->nHeight, masternodeLevel, blockValue, 0, fZMWStake);
+        
+        if (hasPayment) {
+            unsigned int i = txNew.vout.size ();
+            txNew.vout.resize (i + 1);
+            
+            txNew.vout [i].scriptPubKey = payee;
+            txNew.vout [i].nValue = masternodePayment;
+            
+            if (!txNew.vout [fProofOfStake ? 1 : 0].IsZerocoinMint ())
+                txNew.vout [fProofOfStake ? 1 : 0].nValue -= masternodePayment;
+            
+            CTxDestination address1;
+            ExtractDestination (payee, address1);
+            CBitcoinAddress address2 (address1);
+            
+            LogPrint ("masternode", "Masternode payment of %s to %s\n", FormatMoney(masternodePayment).c_str (), address2.ToString ().c_str ());
+        } else if (!fProofOfStake)
+            txNew.vout [0].nValue = blockValue - masternodePayment;
     }
 }
 
@@ -383,7 +375,6 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
         }
         
         CTxDestination masternodeAddress;
-        CMasternode *masternodeWinner;
         ExtractDestination (winner.payee, masternodeAddress);
         CBitcoinAddress payee_addr (masternodeAddress);
 
