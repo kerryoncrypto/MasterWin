@@ -485,26 +485,33 @@ CMasternode* CMasternodeMan::Find(const CPubKey& pubKeyMasternode)
 //
 CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight, bool fFilterSigTime, int& nCount)
 {
+    return GetNextMasternodeInQueueForPayment (nBlockHeight, 0, fFilterSigTime, nCount);
+}
+
+CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment (int nBlockHeight, unsigned int masternodeLevel, bool fFilterSigTime, int& nCount) {
     LOCK(cs);
 
     CMasternode* pBestMasternode = NULL;
     std::vector<pair<int64_t, CTxIn> > vecMasternodeLastPaid;
 
-    /*
-        Make a vector with all of the last paid times
-    */
-
-    int nMnCount = CountEnabled();
+    // Make a vector with all of the last paid times
+    int nMnCount = CountEnabledOnLevel (masternodeLevel);
+    
     for (CMasternode& mn : vMasternodes) {
         mn.Check();
+        
+        // Check the level of tiered masternode
+        if ((masternodeLevel > 0) &&
+            (mn.GetLevel () != masternodeLevel))
+            continue;
+        
         if (!mn.IsEnabled()) continue;
 
         // //check protocol version
         if (mn.protocolVersion < masternodePayments.GetMinMasternodePaymentsProto()) continue;
 
         //it's in the list (up to 8 entries ahead of current block to allow propagation) -- so let's skip it
-        // TODO: Insert masternode-level
-        if (masternodePayments.IsScheduled (mn, nBlockHeight)) continue;
+        if (masternodePayments.IsScheduled (mn, nMnCount, nBlockHeight)) continue;
 
         //it's too new, wait for a cycle
         if (fFilterSigTime && mn.sigTime + (nMnCount * 2.6 * 60) > GetAdjustedTime()) continue;
@@ -518,7 +525,8 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
     nCount = (int)vecMasternodeLastPaid.size();
 
     //when the network is in the process of upgrading, don't penalize nodes that recently restarted
-    if (fFilterSigTime && nCount < nMnCount / 3) return GetNextMasternodeInQueueForPayment(nBlockHeight, false, nCount);
+    if (fFilterSigTime && nCount < nMnCount / 3)
+        return GetNextMasternodeInQueueForPayment (nBlockHeight, masternodeLevel, false, nCount);
 
     // Sort them high to low
     sort(vecMasternodeLastPaid.rbegin(), vecMasternodeLastPaid.rend(), CompareLastPaid());
@@ -579,12 +587,21 @@ CMasternode* CMasternodeMan::FindRandomNotInVec(std::vector<CTxIn>& vecToExclude
 
 CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight, int minProtocol)
 {
+    return GetCurrentMasternodeOnLevel (0, mod, nBlockHeight, minProtocol);
+}
+
+CMasternode* CMasternodeMan::GetCurrentMasternodeOnLevel (unsigned int masternodeLevel, int mod, int64_t nBlockHeight, int minProtocol) {
     int64_t score = 0;
     CMasternode* winner = NULL;
 
     // scan for winner
     for (CMasternode& mn : vMasternodes) {
         mn.Check();
+        
+        if ((masternodeLevel > 0) &&
+            (mn.GetLevel () != masternodeLevel))
+            continue;
+        
         if (mn.protocolVersion < minProtocol || !mn.IsEnabled()) continue;
 
         // calculate the score for each Masternode
