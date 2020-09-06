@@ -596,7 +596,8 @@ UniValue getmasternodeoutputs (const UniValue& params, bool fHelp)
             "[\n"
             "  {\n"
             "    \"txhash\": \"xxxx\",    (string) output transaction hash\n"
-            "    \"outputidx\": n       (numeric) output index number\n"
+            "    \"outputidx\": n,        (numeric) output index number\n"
+            "    \"level\": l,            (numeric) level of output\n"	
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -612,6 +613,7 @@ UniValue getmasternodeoutputs (const UniValue& params, bool fHelp)
         UniValue obj(UniValue::VOBJ);
         obj.push_back(Pair("txhash", out.tx->GetHash().ToString()));
         obj.push_back(Pair("outputidx", out.i));
+        obj.push_back (Pair ("level", (uint64_t)Params ().getMasternodeLevel (out.tx->vout [out.i].nValue)));
         ret.push_back(obj);
     }
 
