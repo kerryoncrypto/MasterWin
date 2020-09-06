@@ -2007,7 +2007,7 @@ int64_t GetMasternodePayment (int nHeight, unsigned int mnLevel, int64_t blockVa
 	if (masternodeLevels == 0)
 		return 0;
 	
-	return masternodeTotalPayment * mnLevel / ((1 << masternodeLevels) - 1);
+	return masternodeTotalPayment * (1 << (mnLevel - 1)) / ((1 << masternodeLevels) - 1);
 }
 
 
