@@ -232,6 +232,7 @@ public:
         ss << payee;
         ss << nBlockHeight;
         ss << vinMasternode.prevout;
+        ss << masternodeLevel;
 
         return ss.GetHash();
     }
@@ -260,6 +261,7 @@ public:
         READWRITE(vinMasternode);
         READWRITE(nBlockHeight);
         READWRITE(payee);
+        READWRITE(masternodeLevel);
         READWRITE(vchSig);
     }
 
