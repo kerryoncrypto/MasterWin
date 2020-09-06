@@ -210,6 +210,7 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             "    \"status\": s,         (string) Status (ENABLED/EXPIRED/REMOVE/etc)\n"
             "    \"addr\": \"addr\",      (string) Masternode MasterWin address\n"
             "    \"version\": v,        (numeric) Masternode protocol version\n"
+            "    \"level\": l,		(numeric) Masternode-Tier Level\n"
             "    \"lastseen\": ttt,     (numeric) The time in seconds since epoch (Jan 1 1970 GMT) of the last seen\n"
             "    \"activetime\": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode has been active\n"
             "    \"lastpaid\": ttt,     (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode was last paid\n"
@@ -257,6 +258,7 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
 			obj.push_back(Pair("ip", mn->addr.ToStringIP()));
             obj.push_back(Pair("addr", CBitcoinAddress(mn->pubKeyCollateralAddress.GetID()).ToString()));
             obj.push_back(Pair("version", mn->protocolVersion));
+            obj.push_back (Pair ("level", (uint64_t)mn->GetLevel ()));
             obj.push_back(Pair("lastseen", (int64_t)mn->lastPing.sigTime));
             obj.push_back(Pair("activetime", (int64_t)(mn->lastPing.sigTime - mn->sigTime)));
             obj.push_back(Pair("lastpaid", (int64_t)mn->GetLastPaid()));
