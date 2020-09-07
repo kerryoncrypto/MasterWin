@@ -555,9 +555,6 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     LOCK(cs_vecPayments);
 
     int nMasternode_Drift_Count = 0;
-
-    std::string strPayeesPossible = "";
-
     CAmount nReward = GetBlockValue(nBlockHeight);
 
     if (IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
@@ -571,7 +568,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
         nMasternode_Drift_Count = mnodeman.size() + Params().MasternodeCountDrift();
     }
     
-    bool transactionCorrect = false;
+    bool transactionCorrect = true;
     CAmount requiredMasternodePayment = 0;
 
     for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
@@ -585,51 +582,53 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
                 nMaxSignatures = payee.nVotes;
         
         // if we don't have at least 6 signatures on a payee, approve whichever is the longest chain
-        if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED) {
-            transactionCorrect = true;
-            
+        if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED)
             continue;
-        }
         
         requiredMasternodePayment = GetMasternodePayment (nBlockHeight, masternodeLevel, nReward, nMasternode_Drift_Count);
+        bool hasLevelPayment = false;
+        std::string strPayeesPossible = "";
         
         for (CMasternodePayee& payee : vecPayments) {
-            bool found = false;
-            
+            // Skip payees on other levels
             if (payee.masternodeLevel != masternodeLevel)
                 continue;
             
+            // Skip payees with little votes
+            if (payee.nVotes < MNPAYMENTS_SIGNATURES_REQUIRED)
+                continue;
+            
+            // Check if this payee was paid
             for (CTxOut out : txNew.vout)
                 if (payee.scriptPubKey == out.scriptPubKey) {
                     if(out.nValue >= requiredMasternodePayment) {
-                        found = true;
+                        hasLevelPayment = true;
                         
                         break;
                     } else
                         LogPrint ("masternode", "Masternode payment is out of drift range. Paid=%s Min=%s\n", FormatMoney (out.nValue).c_str (), FormatMoney (requiredMasternodePayment).c_str ());
                 }
             
-            if (payee.nVotes >= MNPAYMENTS_SIGNATURES_REQUIRED) {
-                if (found) {
-                    transactionCorrect = true;
-                    
-                    continue;
-                }
-                
-                CTxDestination address1;
-                ExtractDestination (payee.scriptPubKey, address1);
-                CBitcoinAddress address2 (address1);
-
-                if (strPayeesPossible == "")
-                    strPayeesPossible += address2.ToString ();
-                else
-                    strPayeesPossible += "," + address2.ToString ();
-            }
+            if (hasLevelPayment)
+                break;
+            
+            // Push payee to possible payees
+            CTxDestination address1;
+            ExtractDestination (payee.scriptPubKey, address1);
+            CBitcoinAddress address2 (address1);
+            
+            if (strPayeesPossible == "")
+                strPayeesPossible += address2.ToString ();
+            else
+                strPayeesPossible += "," + address2.ToString ();
+        }
+        
+        if (!hasLevelPayment) {
+            LogPrint ("masternode", "CMasternodePayments::IsTransactionValid - Missing required payment of %s to %s on level %d\n", FormatMoney (requiredMasternodePayment).c_str (), strPayeesPossible.c_str (), masternodeLevel);
+            
+            transactionCorrect = false;
         }
     }
-
-    if (!transactionCorrect)
-        LogPrint ("masternode", "CMasternodePayments::IsTransactionValid - Missing required payment of %s to %s\n", FormatMoney (requiredMasternodePayment).c_str (), strPayeesPossible.c_str ());
     
     return transactionCorrect;
 }
