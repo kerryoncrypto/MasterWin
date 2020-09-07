@@ -233,6 +233,7 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "[\n"
             "  {\n"
+            "    \"level\": l,          (numeric) Tier/Level of masternode\n"
             "    \"rank\": n,           (numeric) Masternode Rank (or 0 if not enabled)\n"
             "    \"txhash\": \"hash\",    (string) Collateral transaction hash\n"
             "    \"outidx\": n,         (numeric) Collateral transaction output index\n"
@@ -279,6 +280,7 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             CNetAddr node = CNetAddr(strHost, false);
             std::string strNetwork = GetNetworkName(node.GetNetwork());
 
+            obj.push_back (Pair ("level", (uint64_t)mn->GetLevel ()));
             obj.push_back(Pair("rank", (strStatus == "ENABLED" ? s.first : 0)));
             obj.push_back(Pair("network", strNetwork));
             obj.push_back(Pair("txhash", strTxHash));
