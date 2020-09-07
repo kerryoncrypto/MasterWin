@@ -29,10 +29,20 @@ UniValue getpoolinfo(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
-            "  \"current\": \"addr\",    (string) MasterWin address of current masternode\n"
-            "  \"state\": xxxx,        (string) unknown\n"
-            "  \"entries\": xxxx,      (numeric) Number of entries\n"
-            "  \"accepted\": xxxx,     (numeric) Number of entries accepted\n"
+            "  \"current\": \"addr\",      (string) MasterWin address of current masternode\n"
+            "  \"state\": xxxx,          (string) unknown\n"
+            "  \"entries\": xxxx,        (numeric) Number of entries\n"
+            "  \"accepted\": xxxx,       (numeric) Number of entries accepted\n"
+            "  \"tiers\": [\n"
+            "    {\n"
+            "      \"level\": l,         (numeric) Level of tier\n"
+            "      \"current\": \"addr\",  (string) MasterWin address of current masternode\n"
+            "      \"state\": xxxx,      (string) unknown\n"
+            "      \"entries\": xxxx,    (numeric) Number of entries\n"
+            "      \"accepted\": xxxx,   (numeric) Number of entries accepted\n"
+            "    },\n"
+            "    ...\n"
+            "  ]\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -43,6 +53,25 @@ UniValue getpoolinfo(const UniValue& params, bool fHelp)
     obj.push_back(Pair("state", obfuScationPool.GetState()));
     obj.push_back(Pair("entries", obfuScationPool.GetEntriesCount()));
     obj.push_back(Pair("entries_accepted", obfuScationPool.GetCountEntriesAccepted()));
+    
+    UniValue tiers (UniValue::VARR);
+    
+    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+        UniValue tier (UniValue::VOBJ);
+        
+        tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
+        tier.push_back (Pair ("current", mnodeman.GetCurrentMasternodeOnLevel (masternodeLevel)->addr.ToString()));
+        
+        // TODO: This is senseless :)
+        tier.push_back (Pair ("state", obfuScationPool.GetState ()));
+        tier.push_back (Pair ("entries", obfuScationPool.GetEntriesCount ()));
+        tier.push_back (Pair ("entries_accepted", obfuScationPool.GetCountEntriesAccepted ()));
+        
+        tiers.push_back (tier);
+    }
+    
+    obj.push_back (Pair ("tiers", tiers));
+    
     return obj;
 }
 
