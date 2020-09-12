@@ -929,8 +929,14 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
-            "  xxxx: \"xxxx\"   (numeric : string) Block height : Masternode hash\n"
-            "  ,...\n"
+            "  xxxx: [\n   (numeric) Block height\n"
+            "    {\n"
+            "      \"level\": level,\n"
+            "      \"hash\": \"hash\"\n"
+            "    },\n"
+            "    ...\n"
+            "  ],\n"
+            "  ...\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -949,17 +955,36 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
 
     std::vector<CMasternode> vMasternodes = mnodeman.GetFullMasternodeVector();
     for (int nHeight = chainActive.Tip()->nHeight - nLast; nHeight < chainActive.Tip()->nHeight + 20; nHeight++) {
-        uint256 nHigh = 0;
-        CMasternode* pBestMasternode = NULL;
-        BOOST_FOREACH (CMasternode& mn, vMasternodes) {
-            uint256 n = mn.CalculateScore(1, nHeight - 100);
-            if (n > nHigh) {
-                nHigh = n;
-                pBestMasternode = &mn;
+        UniValue block (UniValue::VARR);
+        
+        for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+            uint256 nHigh = 0;
+            CMasternode* pBestMasternode = NULL;
+            
+            BOOST_FOREACH (CMasternode& mn, vMasternodes) {
+                if (mn.GetLevel () != masternodeLevel)
+                    continue;
+                
+                uint256 n = mn.CalculateScore (1, nHeight - 100);
+                
+                if (n > nHigh) {
+                    nHigh = n;
+                    pBestMasternode = &mn;
+                }
+            }
+            
+            if (pBestMasternode) {
+                UniValue tier (UniValue::VOBJ);
+                
+                tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
+                tier.push_back (Pair ("hash", pBestMasternode->vin.prevout.hash.ToString ().c_str ()));
+                
+                block.push_back (tier);
             }
         }
-        if (pBestMasternode)
-            obj.push_back(Pair(strprintf("%d", nHeight), pBestMasternode->vin.prevout.hash.ToString().c_str()));
+        
+        if (block.size ())
+            obj.push_back (Pair (strprintf("%d", nHeight), block));
     }
 
     return obj;
