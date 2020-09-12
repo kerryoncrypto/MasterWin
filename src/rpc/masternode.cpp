@@ -420,29 +420,61 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
-            "  \"protocol\": xxxx,        (numeric) Protocol version\n"
-            "  \"txhash\": \"xxxx\",      (string) Collateral transaction hash\n"
-            "  \"pubkey\": \"xxxx\",      (string) MN Public key\n"
-            "  \"lastseen\": xxx,       (numeric) Time since epoch of last seen\n"
-            "  \"activeseconds\": xxx,  (numeric) Seconds MN has been active\n"
+            "  \"protocol\": xxxx,          (numeric) Protocol version\n"
+            "  \"txhash\": \"xxxx\",          (string) Collateral transaction hash\n"
+            "  \"pubkey\": \"xxxx\",          (string) MN Public key\n"
+            "  \"lastseen\": xxx,           (numeric) Time since epoch of last seen\n"
+            "  \"activeseconds\": xxx,      (numeric) Seconds MN has been active\n"
+            "  \"tiers\": [\n"
+            "    {\n"
+            "      \"level\": level,        (numeric) Tier-Level\n"
+            "      \"protocol\": xxxx,      (numeric) Protocol version\n"
+            "      \"txhash\": \"xxxx\",      (string) Collateral transaction hash\n"
+            "      \"pubkey\": \"xxxx\",      (string) MN Public key\n"
+            "      \"lastseen\": xxx,       (numeric) Time since epoch of last seen\n"
+            "      \"activeseconds\": xxx,  (numeric) Seconds MN has been active\n"
+            "    },\n"
+            "    ...\n"
+            "  ]\n"
             "}\n"
 
             "\nExamples:\n" +
             HelpExampleCli("masternodecurrent", "") + HelpExampleRpc("masternodecurrent", ""));
 
     CMasternode* winner = mnodeman.GetCurrentMasterNode(1);
-    if (winner) {
-        UniValue obj(UniValue::VOBJ);
+    
+    if (!winner)
+        throw runtime_error ("unknown");
+    
+    UniValue obj (UniValue::VOBJ);
+    
+    obj.push_back (Pair ("protocol", (int64_t)winner->protocolVersion));
+    obj.push_back (Pair ("txhash", winner->vin.prevout.hash.ToString ()));
+    obj.push_back (Pair ("pubkey", CBitcoinAddress (winner->pubKeyCollateralAddress.GetID ()).ToString ()));
+    obj.push_back (Pair ("lastseen", (winner->lastPing == CMasternodePing ()) ? winner->sigTime : (int64_t)winner->lastPing.sigTime));
+    obj.push_back (Pair ("activeseconds", (winner->lastPing == CMasternodePing ()) ? 0 : (int64_t)(winner->lastPing.sigTime - winner->sigTime)));
+    
+    UniValue tiers (UniValue::VARR);
+    
+    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+        if (!(winner = mnodeman.GetCurrentMasternodeOnLevel (masternodeLevel, 1)))
+            continue;
+        
+        UniValue tier (UniValue::VOBJ);
+        
+        tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
+        tier.push_back (Pair ("protocol", (int64_t)winner->protocolVersion));
+        tier.push_back (Pair ("txhash", winner->vin.prevout.hash.ToString ()));
+        tier.push_back (Pair ("pubkey", CBitcoinAddress (winner->pubKeyCollateralAddress.GetID ()).ToString ()));
+        tier.push_back (Pair ("lastseen", (winner->lastPing == CMasternodePing ()) ? winner->sigTime : (int64_t)winner->lastPing.sigTime));
+        tier.push_back (Pair ("activeseconds", (winner->lastPing == CMasternodePing ()) ? 0 : (int64_t)(winner->lastPing.sigTime - winner->sigTime)));
 
-        obj.push_back(Pair("protocol", (int64_t)winner->protocolVersion));
-        obj.push_back(Pair("txhash", winner->vin.prevout.hash.ToString()));
-        obj.push_back(Pair("pubkey", CBitcoinAddress(winner->pubKeyCollateralAddress.GetID()).ToString()));
-        obj.push_back(Pair("lastseen", (winner->lastPing == CMasternodePing()) ? winner->sigTime : (int64_t)winner->lastPing.sigTime));
-        obj.push_back(Pair("activeseconds", (winner->lastPing == CMasternodePing()) ? 0 : (int64_t)(winner->lastPing.sigTime - winner->sigTime)));
-        return obj;
+        tiers.push_back (tier);
     }
 
-    throw runtime_error("unknown");
+    obj.push_back (Pair ("tiers", tiers));
+    
+    return obj;
 }
 
 UniValue masternodedebug (const UniValue& params, bool fHelp)
