@@ -27,8 +27,16 @@ extern CMasternodePayments masternodePayments;
 #define MNPAYMENTS_SIGNATURES_REQUIRED 6
 #define MNPAYMENTS_SIGNATURES_TOTAL 10
 
+class CPaymentWinner {
+    public:
+        std::string strAddress;
+        uint64_t nVotes;
+        unsigned int masternodeLevel;
+};
+
 void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight);
+std::vector<CPaymentWinner> GetRequiredPayments (int nBlockHeight);
 bool IsBlockValueValid(const CBlock& block, CAmount nExpectedValue, CAmount nMinted);
 void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake, bool fZMWStake);
 
@@ -188,6 +196,7 @@ public:
     }
 
     bool IsTransactionValid(const CTransaction& txNew);
+    std::vector<CPaymentWinner> GetRequiredPayments ();
 
     ADD_SERIALIZE_METHODS;
 
@@ -350,6 +359,7 @@ public:
 
     int GetMinMasternodePaymentsProto();
     void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
+    std::vector<CPaymentWinner> GetRequiredPayments (int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool fZMWStake);
     std::string ToString() const;
     int GetOldestBlock();

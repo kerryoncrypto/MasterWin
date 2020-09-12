@@ -882,6 +882,34 @@ std::vector<CFinalizedBudget*> CBudgetManager::GetFinalizedBudgets()
     return vFinalizedBudgetsRet;
 }
 
+std::vector<CPaymentWinner> CBudgetManager::GetRequiredPayments (int nBlockHeight) {
+    LOCK (cs);
+    
+    std::vector<CPaymentWinner> vPaymentWinners;
+    std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin ();
+    
+    while (it != mapFinalizedBudgets.end ()) {
+        CFinalizedBudget* pfinalizedBudget = &((*it).second);
+        
+        if ((nBlockHeight >= pfinalizedBudget->GetBlockStart ()) && (nBlockHeight <= pfinalizedBudget->GetBlockEnd ())) {
+            CTxBudgetPayment payment;
+            
+            if (pfinalizedBudget->GetBudgetPaymentByBlock (nBlockHeight, payment)) {
+                CPaymentWinner paymentWinner;
+                
+                paymentWinner.strAddress = payment.nProposalHash.ToString ();
+                
+                vPaymentWinners.push_back (paymentWinner);
+            } else
+                LogPrint ("mnbudget","CBudgetManager::GetRequiredPaymentsString - Couldn't find budget payment for block %d\n", nBlockHeight);
+        }
+        
+        ++it;
+    }
+    
+    return vPaymentWinners;
+}
+
 CAmount CBudgetManager::GetTotalBudget(int nHeight)
 {
     if (chainActive.Tip() == NULL) return 0;

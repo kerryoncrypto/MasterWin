@@ -282,6 +282,13 @@ void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStak
     }
 }
 
+std::vector<CPaymentWinner>  GetRequiredPayments (int nBlockHeight) {
+    if (IsSporkActive (SPORK_13_ENABLE_SUPERBLOCKS) && budget.IsBudgetPaymentBlock (nBlockHeight))
+        return budget.GetRequiredPayments (nBlockHeight);
+    
+    return masternodePayments.GetRequiredPayments (nBlockHeight);
+}
+
 void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool fZMWStake)
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
@@ -631,6 +638,37 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     }
     
     return transactionCorrect;
+}
+
+std::vector<CPaymentWinner> CMasternodeBlockPayees::GetRequiredPayments () {
+    LOCK (cs_vecPayments);
+    std::vector<CPaymentWinner> vPaymentWinners;
+    
+    for (CMasternodePayee& payee : vecPayments) {
+        CTxDestination address1;
+        ExtractDestination (payee.scriptPubKey, address1);
+        CBitcoinAddress address2 (address1);
+        CPaymentWinner paymentWinner;
+        
+        paymentWinner.strAddress = address2.ToString ();
+        paymentWinner.nVotes = payee.nVotes;
+        paymentWinner.masternodeLevel = payee.masternodeLevel;
+        
+        vPaymentWinners.push_back (paymentWinner);
+    }
+    
+    return vPaymentWinners;
+}
+
+std::vector<CPaymentWinner> CMasternodePayments::GetRequiredPayments (int nBlockHeight) {
+    LOCK (cs_mapMasternodeBlocks);
+    
+    if (mapMasternodeBlocks.count (nBlockHeight))
+        return mapMasternodeBlocks [nBlockHeight].GetRequiredPayments ();
+    
+    std::vector<CPaymentWinner> vPaymentWinners;
+    
+    return vPaymentWinners;
 }
 
 bool CMasternodePayments::IsTransactionValid(const CTransaction& txNew, int nBlockHeight)
