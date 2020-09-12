@@ -811,7 +811,8 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
             "  \"netaddr\": \"xxxx\",     (string) Masternode network address\n"
             "  \"addr\": \"xxxx\",        (string) MasterWin address for masternode payments\n"
             "  \"status\": \"xxxx\",      (string) Masternode status\n"
-            "  \"message\": \"xxxx\"      (string) Masternode status message\n"
+            "  \"message\": \"xxxx\",     (string) Masternode status message\n"
+            "  \"level\": level,        (numeric) Tier-Level of masternode\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -829,6 +830,8 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
         mnObj.push_back(Pair("addr", CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
+        mnObj.push_back (Pair ("level", (uint64_t)pmn->GetLevel ()));
+        
         return mnObj;
     }
     throw runtime_error("Masternode not found in the list of available masternodes. Current status: "
