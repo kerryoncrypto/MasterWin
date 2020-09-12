@@ -749,7 +749,8 @@ UniValue listmasternodeconf (const UniValue& params, bool fHelp)
             "    \"privateKey\": \"xxxx\",   (string) masternode private key\n"
             "    \"txHash\": \"xxxx\",       (string) transaction hash\n"
             "    \"outputIndex\": n,       (numeric) transaction output index\n"
-            "    \"status\": \"xxxx\"        (string) masternode status\n"
+            "    \"status\": \"xxxx\",       (string) masternode status\n"
+            "    \"level\": level,         (numeric) Level of tiered masternode\n"
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -768,6 +769,8 @@ UniValue listmasternodeconf (const UniValue& params, bool fHelp)
             continue;
         CTxIn vin = CTxIn(uint256(mne.getTxHash()), uint32_t(nIndex));
         CMasternode* pmn = mnodeman.Find(vin);
+        CTransaction prevTx;
+        uint256 hashBlock = 0;
 
         std::string strStatus = pmn ? pmn->Status() : "MISSING";
 
@@ -783,6 +786,11 @@ UniValue listmasternodeconf (const UniValue& params, bool fHelp)
         mnObj.push_back(Pair("txHash", mne.getTxHash()));
         mnObj.push_back(Pair("outputIndex", mne.getOutputIndex()));
         mnObj.push_back(Pair("status", strStatus));
+        
+        if (GetTransaction (vin.prevout.hash, prevTx, hashBlock, true) &&
+            (prevTx.vout.size () > vin.prevout.n))
+            mnObj.push_back (Pair ("level", (uint64_t)Params ().getMasternodeLevel (prevTx.vout [vin.prevout.n].nValue)));
+        
         ret.push_back(mnObj);
     }
 
