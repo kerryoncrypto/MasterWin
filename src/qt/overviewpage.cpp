@@ -194,11 +194,9 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelTotalz->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, sumTotalBalance, false, BitcoinUnits::separatorAlways));
 
     QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    QNetworkReply *reply = manager->get (QNetworkRequest (QUrl ("https://api.coingecko.com/api/v3/coins/masterwin?localization=false")));
 
-    connect(manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(syncRequestFinished(QNetworkReply*)));
-
-    manager->get(QNetworkRequest(QUrl("https://api.coingecko.com/api/v3/coins/masterwin?localization=false")));  
+    connect (reply, SIGNAL (finished ()), this, SLOT (syncRequestFinished ()));
 
     // Adjust bubble-help according to AutoMint settings
 	QString automintHelp = tr("Current percentage of zmw.\nIf AutoMint is enabled this percentage will settle around the configured AutoMint percentage (default = 10%).\n");
@@ -342,8 +340,9 @@ void OverviewPage::showOutOfSyncWarning(bool fShow)
     ui->labelTransactionsStatus->setVisible(fShow);
 }
 //GET Price from Gecko
-void OverviewPage::syncRequestFinished(QNetworkReply *reply)
-{
+void OverviewPage::syncRequestFinished () {
+    QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender ());
+    
     //market_data / current_price / usd
 
     if (reply->error() == QNetworkReply::NoError)
@@ -356,7 +355,6 @@ void OverviewPage::syncRequestFinished(QNetworkReply *reply)
             ui->labelPricez->setText("NON");
             return;
         }
-        
         QJsonObject jsonObject = jsonResponse.object();
 
             QJsonObject sett3 = jsonObject["market_data"].toObject();
@@ -375,7 +373,6 @@ void OverviewPage::syncRequestFinished(QNetworkReply *reply)
 
             ui->labelPricez->setText(totalPrice);  
             ui->labelUSDPricez->setText(unitPrice);
-
     }    
     else{
         ui->labelPricez->setText("NULL");
