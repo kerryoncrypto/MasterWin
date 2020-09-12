@@ -114,6 +114,7 @@ public:
     int CountEnabledOnLevel (unsigned int mnLevel, int protocolVersion = -1);
 
     void CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion);
+    void CountNetworks (unsigned int masternodeLevel, int protocolVersion, int& ipv4, int& ipv6, int& onion);
 
     void DsegUpdate(CNode* pnode);
 
@@ -148,10 +149,24 @@ public:
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
     /// Return the number of (unique) Masternodes
-    int size() { return vMasternodes.size(); }
+    int size () {
+        return vMasternodes.size();
+    }
+    
+    int size (unsigned int masternodeLevel) {
+        int masternodeCount = 0;
+        
+        BOOST_FOREACH (CMasternode masternode, vMasternodes) {
+            if (masternode.GetLevel () == masternodeLevel)
+                masternodeCount++;
+        }
+        
+        return masternodeCount;
+    }
 
     /// Return the number of Masternodes older than (default) 8000 seconds
     int stable_size ();
+    int stable_size (unsigned int masternodeLevel);
 
     std::string ToString() const;
 

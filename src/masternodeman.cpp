@@ -348,14 +348,20 @@ void CMasternodeMan::Clear()
     nDsqCount = 0;
 }
 
-int CMasternodeMan::stable_size ()
-{
+int CMasternodeMan::stable_size () {
+    return stable_size (0);
+}
+
+int CMasternodeMan::stable_size (unsigned int masternodeLevel) {
     int nStable_size = 0;
     int nMinProtocol = ActiveProtocol();
     int64_t nMasternode_Min_Age = MN_WINNER_MINIMUM_AGE;
     int64_t nMasternode_Age = 0;
 
     for (CMasternode& mn : vMasternodes) {
+        if ((masternodeLevel > 0) && (mn.GetLevel () != masternodeLevel))
+            continue;
+        
         if (mn.protocolVersion < nMinProtocol) {
             continue; // Skip obsolete versions
         }
@@ -398,11 +404,17 @@ int CMasternodeMan::CountEnabledOnLevel (unsigned int mnLevel, int protocolVersi
     return masternodeCount;
 }
 
-void CMasternodeMan::CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion)
-{
+void CMasternodeMan::CountNetworks (int protocolVersion, int& ipv4, int& ipv6, int& onion) {
+    return CountNetworks (0, protocolVersion, ipv4, ipv6, onion);
+}
+
+void CMasternodeMan::CountNetworks (unsigned int masternodeLevel, int protocolVersion, int& ipv4, int& ipv6, int& onion) {
     protocolVersion = protocolVersion == -1 ? masternodePayments.GetMinMasternodePaymentsProto() : protocolVersion;
 
     for (CMasternode& mn : vMasternodes) {
+        if ((masternodeLevel > 0) && (mn.GetLevel () != masternodeLevel))
+            continue;
+        
         mn.Check();
         std::string strHost;
         int port;

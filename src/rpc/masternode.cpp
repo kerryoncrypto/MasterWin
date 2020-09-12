@@ -336,11 +336,28 @@ UniValue getmasternodecount (const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
-            "  \"total\": n,        (numeric) Total masternodes\n"
-            "  \"stable\": n,       (numeric) Stable count\n"
-            "  \"obfcompat\": n,    (numeric) Obfuscation Compatible\n"
-            "  \"enabled\": n,      (numeric) Enabled masternodes\n"
-            "  \"inqueue\": n       (numeric) Masternodes in queue\n"
+            "  \"total\": n,          (numeric) Total masternodes\n"
+            "  \"stable\": n,         (numeric) Stable count\n"
+            "  \"obfcompat\": n,      (numeric) Obfuscation Compatible\n"
+            "  \"enabled\": n,        (numeric) Enabled masternodes\n"
+            "  \"inqueue\": n,        (numeric) Masternodes in queue\n"
+            "  \"ipv4\": n,           (numeric) Masternodes with IPv4 address\n"
+            "  \"ipv6\": n,           (numeric) Masternodes with IPv6 address\n"
+            "  \"onion\": n,          (numeric) Masternodes with Onion address\n"
+            "  \"tiers\": [\n"
+            "    {\n"
+            "      \"level\": l,      (numeric) Tier-Level\n"
+            "      \"total\": n,      (numeric) Total masternodes\n"
+            "      \"stable\": n,     (numeric) Stable count\n"
+            "      \"obfcompat\": n,  (numeric) Obfuscation Compatible\n"
+            "      \"enabled\": n,    (numeric) Enabled masternodes\n"
+            "      \"inqueue\": n,    (numeric) Masternodes in queue\n"
+            "      \"ipv4\": n,       (numeric) Masternodes with IPv4 address\n"
+            "      \"ipv6\": n,       (numeric) Masternodes with IPv6 address\n"
+            "      \"onion\": n,      (numeric) Masternodes with Onion address\n"
+            "    },\n"
+            "    ...\n"
+            "  ]\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -363,6 +380,33 @@ UniValue getmasternodecount (const UniValue& params, bool fHelp)
     obj.push_back(Pair("ipv4", ipv4));
     obj.push_back(Pair("ipv6", ipv6));
     obj.push_back(Pair("onion", onion));
+    
+    UniValue tiers (UniValue::VARR);
+
+    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+        UniValue tier (UniValue::VOBJ);
+        
+        nCount = ipv4 = ipv6 = onion = 0;
+        
+        if (chainActive.Tip ())
+            mnodeman.GetNextMasternodeInQueueForPayment (chainActive.Tip ()->nHeight, masternodeLevel, true, nCount);
+        
+        mnodeman.CountNetworks (masternodeLevel, ActiveProtocol (), ipv4, ipv6, onion);
+        
+        tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
+        tier.push_back (Pair ("total", mnodeman.size (masternodeLevel)));
+        tier.push_back (Pair ("stable", mnodeman.stable_size (masternodeLevel)));
+        tier.push_back (Pair ("obfcompat", mnodeman.CountEnabledOnLevel (masternodeLevel, ActiveProtocol ())));
+        tier.push_back (Pair ("enabled", mnodeman.CountEnabledOnLevel (masternodeLevel)));
+        tier.push_back (Pair ("inqueue", nCount));
+        tier.push_back (Pair ("ipv4", ipv4));
+        tier.push_back (Pair ("ipv6", ipv6));
+        tier.push_back (Pair ("onion", onion));
+
+        tiers.push_back (tier);
+    }
+
+    obj.push_back (Pair ("tiers", tiers));
 
     return obj;
 }
