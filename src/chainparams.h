@@ -14,6 +14,7 @@
 #include "primitives/block.h"
 #include "protocol.h"
 #include "uint256.h"
+#include "chain.h"
 
 #include "libzerocoin/Params.h"
 #include <vector>
@@ -27,9 +28,17 @@ struct CDNSSeedData {
 };
 
 struct MasternodeTier {
-    CAmount Collateral;
-    uint16_t Weight;
+  CAmount Collateral;
+  uint16_t Weight;
 };
+
+struct MasternodeTiers {
+  unsigned int blockHeight;
+  std::vector<MasternodeTier> masternodeTiers;
+};
+
+/** The currently-connected chain of blocks. */
+extern CChain chainActive;
 
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
@@ -133,49 +142,104 @@ public:
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
-    
-    bool isMasternodeCollateral (CAmount nValue) const {
-        // Check if the given value is on collateral-list
-        BOOST_FOREACH (const MasternodeTier& masternodeTier, vMasternodeTiers) {
-            if (nValue == masternodeTier.Collateral)
-                return true;
-        }
-        
-        // Cannot be a valid collateral-value if we get here
-        return false;
+  
+  bool isMasternodeCollateral (CAmount nValue, unsigned int atBlockHeight = 0) const {
+    if (atBlockHeight == 0) {
+      CBlockIndex* chainTip = chainActive.Tip ();
+
+      if (chainTip != NULL)
+        atBlockHeight = chainTip->nHeight;
     }
     
-    unsigned int getMasternodeLevels () const {
-        return vMasternodeTiers.size ();
+    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
+      // Check if this tiers aren't active yet
+      if (masternodeTiers.blockHeight > atBlockHeight)
+        continue;
+      
+      // Check if the given value is on collateral-list
+      BOOST_FOREACH (const MasternodeTier& masternodeTier, masternodeTiers.masternodeTiers) {
+        if (nValue == masternodeTier.Collateral)
+          return true;
+      }
+      
+      break;
     }
     
-    unsigned int getMasternodeLevel (CAmount collateralValue) const {
-        unsigned int currentLevel = 0;
-        
-        // Check if the given value is on collateral-list
-        BOOST_FOREACH (const MasternodeTier& masternodeTier, vMasternodeTiers) {
-            currentLevel++;
-            
-            if (collateralValue == masternodeTier.Collateral)
-                return currentLevel;
-        }
-        
-        return 0;
+    // Cannot be a valid collateral-value if we get here
+    return false;
+  }
+  
+  unsigned int getMasternodeTiers (unsigned int atBlockHeight = 0) const {
+    if (atBlockHeight == 0) {
+      CBlockIndex* chainTip = chainActive.Tip ();
+      
+      if (chainTip != NULL)
+        atBlockHeight = chainTip->nHeight;
     }
     
-    unsigned int getMasternodeTierWeight (unsigned int masternodeTier = 0) const {
+    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
+      // Find first active tiers
+      if (masternodeTiers.blockHeight <= atBlockHeight)
+        return masternodeTiers.masternodeTiers.size ();
+    }
+    
+    return 0;
+  }
+  
+  unsigned int getMasternodeTier (CAmount collateralValue, unsigned int atBlockHeight = 0) const {
+    if (atBlockHeight == 0) {
+      CBlockIndex* chainTip = chainActive.Tip ();
+      
+      if (chainTip != NULL)
+        atBlockHeight = chainTip->nHeight;
+    }
+    
+    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
+      // Check if this tiers aren't active yet
+      if (masternodeTiers.blockHeight > atBlockHeight)
+        continue;
+      
+      unsigned int currentLevel = 0;
+      
+      // Check if the given value is on collateral-list
+      BOOST_FOREACH (const MasternodeTier& masternodeTier, masternodeTiers.masternodeTiers) {
+        currentLevel++;
+        
+        if (collateralValue == masternodeTier.Collateral)
+          return currentLevel;
+      }
+      
+      break;
+    }
+      
+    return 0;
+  }
+  
+  unsigned int getMasternodeTierWeight (unsigned int masternodeTier = 0, unsigned int atBlockHeight = 0) const {
+    if (atBlockHeight == 0) {
+      CBlockIndex* chainTip = chainActive.Tip ();
+      
+      if (chainTip != NULL)
+        atBlockHeight = chainTip->nHeight;
+    }
+    
+    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
+      // Check if this tiers aren't active yet
+      if (masternodeTiers.blockHeight > atBlockHeight)
+        continue;
+      
       // Make sure the tier is valid
-      if (masternodeTier > vMasternodeTiers.size ())
+      if (masternodeTier > masternodeTiers.masternodeTiers.size ())
         return 0;
       
       // Return weight of a given tier
       if (masternodeTier > 0)
-        return vMasternodeTiers [masternodeTier - 1].Weight;
+        return masternodeTiers.masternodeTiers [masternodeTier - 1].Weight;
       
       // Collect sum of all tiers
       unsigned int tierWeightSum = 0;
       
-      BOOST_FOREACH (const MasternodeTier& masternodeTier, vMasternodeTiers) {
+      BOOST_FOREACH (const MasternodeTier& masternodeTier, masternodeTiers.masternodeTiers) {
         tierWeightSum += masternodeTier.Weight;
       }
       
@@ -185,6 +249,9 @@ public:
       
       return tierWeightSum;
     }
+    
+    return (masternodeTier == 0 ? 1 : 0);
+  }
 
 protected:
     CChainParams() {}
@@ -250,7 +317,7 @@ protected:
     int nBlockEnforceInvalidUTXO;
     int nBlockZerocoinV2;
     
-    std::vector<MasternodeTier> vMasternodeTiers;
+    std::vector<MasternodeTiers> vMasternodeTiers;
 };
 
 /**

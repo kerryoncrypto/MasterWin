@@ -137,7 +137,7 @@ unsigned int CMasternode::GetLevel () {
     if (vin.prevout.n >= prevTx.vout.size ())
         return 0;
     
-    return Params ().getMasternodeLevel (prevTx.vout [vin.prevout.n].nValue);
+    return Params ().getMasternodeTier (prevTx.vout [vin.prevout.n].nValue);
 }
 
 //

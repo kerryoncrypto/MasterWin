@@ -218,11 +218,16 @@ public:
             "MUqGH9fvKxjSSJhLQuKMM1yD8EsuZnc6P3",
         };
         
-        vMasternodeTiers.push_back ({   1000 * COIN, 1 });
-        vMasternodeTiers.push_back ({   4000 * COIN, 2 });
-        vMasternodeTiers.push_back ({  10000 * COIN, 4 });
-        vMasternodeTiers.push_back ({ 100000 * COIN, 8 });
-    }
+    vMasternodeTiers.push_back ({
+      nLastPOWBlock,
+      {
+        {   1000 * COIN, 1 },
+        {   4000 * COIN, 2 },
+        {  10000 * COIN, 4 },
+        { 100000 * COIN, 8 }
+      }
+    });
+  }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
     {

@@ -35,7 +35,7 @@ UniValue getpoolinfo(const UniValue& params, bool fHelp)
             "  \"accepted\": xxxx,       (numeric) Number of entries accepted\n"
             "  \"tiers\": [\n"
             "    {\n"
-            "      \"level\": l,         (numeric) Level of tier\n"
+            "      \"tier\": t,          (numeric) Level of tier\n"
             "      \"current\": \"addr\",  (string) MasterWin address of current masternode\n"
             "      \"state\": xxxx,      (string) unknown\n"
             "      \"entries\": xxxx,    (numeric) Number of entries\n"
@@ -56,11 +56,11 @@ UniValue getpoolinfo(const UniValue& params, bool fHelp)
     
     UniValue tiers (UniValue::VARR);
     
-    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
         UniValue tier (UniValue::VOBJ);
         
-        tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
-        tier.push_back (Pair ("current", mnodeman.GetCurrentMasternodeOnLevel (masternodeLevel)->addr.ToString()));
+        tier.push_back (Pair ("tier", (uint64_t)masternodeTier));
+        tier.push_back (Pair ("current", mnodeman.GetCurrentMasternodeOnLevel (masternodeTier)->addr.ToString()));
         
         // TODO: This is senseless :)
         tier.push_back (Pair ("state", obfuScationPool.GetState ()));
@@ -233,14 +233,13 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "[\n"
             "  {\n"
-            "    \"level\": l,          (numeric) Tier/Level of masternode\n"
+            "    \"tier\": t,           (numeric) Tier-Level of masternode\n"
             "    \"rank\": n,           (numeric) Masternode Rank (or 0 if not enabled)\n"
             "    \"txhash\": \"hash\",    (string) Collateral transaction hash\n"
             "    \"outidx\": n,         (numeric) Collateral transaction output index\n"
             "    \"status\": s,         (string) Status (ENABLED/EXPIRED/REMOVE/etc)\n"
             "    \"addr\": \"addr\",      (string) Masternode MasterWin address\n"
             "    \"version\": v,        (numeric) Masternode protocol version\n"
-            "    \"level\": l,		(numeric) Masternode-Tier Level\n"
             "    \"lastseen\": ttt,     (numeric) The time in seconds since epoch (Jan 1 1970 GMT) of the last seen\n"
             "    \"activetime\": ttt,   (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode has been active\n"
             "    \"lastpaid\": ttt,     (numeric) The time in seconds since epoch (Jan 1 1970 GMT) masternode was last paid\n"
@@ -280,7 +279,7 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             CNetAddr node = CNetAddr(strHost, false);
             std::string strNetwork = GetNetworkName(node.GetNetwork());
 
-            obj.push_back (Pair ("level", (uint64_t)mn->GetLevel ()));
+            obj.push_back (Pair ("tier", (uint64_t)mn->GetLevel ()));
             obj.push_back(Pair("rank", (strStatus == "ENABLED" ? s.first : 0)));
             obj.push_back(Pair("network", strNetwork));
             obj.push_back(Pair("txhash", strTxHash));
@@ -289,7 +288,6 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
 			obj.push_back(Pair("ip", mn->addr.ToStringIP()));
             obj.push_back(Pair("addr", CBitcoinAddress(mn->pubKeyCollateralAddress.GetID()).ToString()));
             obj.push_back(Pair("version", mn->protocolVersion));
-            obj.push_back (Pair ("level", (uint64_t)mn->GetLevel ()));
             obj.push_back(Pair("lastseen", (int64_t)mn->lastPing.sigTime));
             obj.push_back(Pair("activetime", (int64_t)(mn->lastPing.sigTime - mn->sigTime)));
             obj.push_back(Pair("lastpaid", (int64_t)mn->GetLastPaid()));
@@ -346,7 +344,7 @@ UniValue getmasternodecount (const UniValue& params, bool fHelp)
             "  \"onion\": n,          (numeric) Masternodes with Onion address\n"
             "  \"tiers\": [\n"
             "    {\n"
-            "      \"level\": l,      (numeric) Tier-Level\n"
+            "      \"tier\": t,       (numeric) Tier-Level\n"
             "      \"total\": n,      (numeric) Total masternodes\n"
             "      \"stable\": n,     (numeric) Stable count\n"
             "      \"obfcompat\": n,  (numeric) Obfuscation Compatible\n"
@@ -383,21 +381,21 @@ UniValue getmasternodecount (const UniValue& params, bool fHelp)
     
     UniValue tiers (UniValue::VARR);
 
-    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
         UniValue tier (UniValue::VOBJ);
         
         nCount = ipv4 = ipv6 = onion = 0;
         
         if (chainActive.Tip ())
-            mnodeman.GetNextMasternodeInQueueForPayment (chainActive.Tip ()->nHeight, masternodeLevel, true, nCount);
+            mnodeman.GetNextMasternodeInQueueForPayment (chainActive.Tip ()->nHeight, masternodeTier, true, nCount);
         
-        mnodeman.CountNetworks (masternodeLevel, ActiveProtocol (), ipv4, ipv6, onion);
+        mnodeman.CountNetworks (masternodeTier, ActiveProtocol (), ipv4, ipv6, onion);
         
-        tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
-        tier.push_back (Pair ("total", mnodeman.size (masternodeLevel)));
-        tier.push_back (Pair ("stable", mnodeman.stable_size (masternodeLevel)));
-        tier.push_back (Pair ("obfcompat", mnodeman.CountEnabledOnLevel (masternodeLevel, ActiveProtocol ())));
-        tier.push_back (Pair ("enabled", mnodeman.CountEnabledOnLevel (masternodeLevel)));
+        tier.push_back (Pair ("tier", (uint64_t)masternodeTier));
+        tier.push_back (Pair ("total", mnodeman.size (masternodeTier)));
+        tier.push_back (Pair ("stable", mnodeman.stable_size (masternodeTier)));
+        tier.push_back (Pair ("obfcompat", mnodeman.CountEnabledOnLevel (masternodeTier, ActiveProtocol ())));
+        tier.push_back (Pair ("enabled", mnodeman.CountEnabledOnLevel (masternodeTier)));
         tier.push_back (Pair ("inqueue", nCount));
         tier.push_back (Pair ("ipv4", ipv4));
         tier.push_back (Pair ("ipv6", ipv6));
@@ -427,7 +425,7 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
             "  \"activeseconds\": xxx,      (numeric) Seconds MN has been active\n"
             "  \"tiers\": [\n"
             "    {\n"
-            "      \"level\": level,        (numeric) Tier-Level\n"
+            "      \"tier\": tier,          (numeric) Tier-Level\n"
             "      \"protocol\": xxxx,      (numeric) Protocol version\n"
             "      \"txhash\": \"xxxx\",      (string) Collateral transaction hash\n"
             "      \"pubkey\": \"xxxx\",      (string) MN Public key\n"
@@ -456,13 +454,13 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
     
     UniValue tiers (UniValue::VARR);
     
-    for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
-        if (!(winner = mnodeman.GetCurrentMasternodeOnLevel (masternodeLevel, 1)))
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
+        if (!(winner = mnodeman.GetCurrentMasternodeOnLevel (masternodeTier, 1)))
             continue;
         
         UniValue tier (UniValue::VOBJ);
         
-        tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
+        tier.push_back (Pair ("tier", (uint64_t)masternodeTier));
         tier.push_back (Pair ("protocol", (int64_t)winner->protocolVersion));
         tier.push_back (Pair ("txhash", winner->vin.prevout.hash.ToString ()));
         tier.push_back (Pair ("pubkey", CBitcoinAddress (winner->pubKeyCollateralAddress.GetID ()).ToString ()));
@@ -704,7 +702,7 @@ UniValue getmasternodeoutputs (const UniValue& params, bool fHelp)
             "  {\n"
             "    \"txhash\": \"xxxx\",    (string) output transaction hash\n"
             "    \"outputidx\": n,        (numeric) output index number\n"
-            "    \"level\": l,            (numeric) level of output\n"	
+            "    \"tier\": t,             (numeric) tier-level of output\n"	
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -720,7 +718,7 @@ UniValue getmasternodeoutputs (const UniValue& params, bool fHelp)
         UniValue obj(UniValue::VOBJ);
         obj.push_back(Pair("txhash", out.tx->GetHash().ToString()));
         obj.push_back(Pair("outputidx", out.i));
-        obj.push_back (Pair ("level", (uint64_t)Params ().getMasternodeLevel (out.tx->vout [out.i].nValue)));
+        obj.push_back (Pair ("tier", (uint64_t)Params ().getMasternodeTier (out.tx->vout [out.i].nValue)));
         ret.push_back(obj);
     }
 
@@ -750,7 +748,7 @@ UniValue listmasternodeconf (const UniValue& params, bool fHelp)
             "    \"txHash\": \"xxxx\",       (string) transaction hash\n"
             "    \"outputIndex\": n,       (numeric) transaction output index\n"
             "    \"status\": \"xxxx\",       (string) masternode status\n"
-            "    \"level\": level,         (numeric) Level of tiered masternode\n"
+            "    \"tier\": tier,           (numeric) Tier-Level of masternode\n"
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -789,7 +787,7 @@ UniValue listmasternodeconf (const UniValue& params, bool fHelp)
         
         if (GetTransaction (vin.prevout.hash, prevTx, hashBlock, true) &&
             (prevTx.vout.size () > vin.prevout.n))
-            mnObj.push_back (Pair ("level", (uint64_t)Params ().getMasternodeLevel (prevTx.vout [vin.prevout.n].nValue)));
+            mnObj.push_back (Pair ("tier", (uint64_t)Params ().getMasternodeTier (prevTx.vout [vin.prevout.n].nValue)));
         
         ret.push_back(mnObj);
     }
@@ -812,7 +810,7 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
             "  \"addr\": \"xxxx\",        (string) MasterWin address for masternode payments\n"
             "  \"status\": \"xxxx\",      (string) Masternode status\n"
             "  \"message\": \"xxxx\",     (string) Masternode status message\n"
-            "  \"level\": level,        (numeric) Tier-Level of masternode\n"
+            "  \"tier\": tier,          (numeric) Tier-Level of masternode\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -830,7 +828,7 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
         mnObj.push_back(Pair("addr", CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
-        mnObj.push_back (Pair ("level", (uint64_t)pmn->GetLevel ()));
+        mnObj.push_back (Pair ("tier", (uint64_t)pmn->GetLevel ()));
         
         return mnObj;
     }
@@ -856,7 +854,7 @@ UniValue getmasternodewinners (const UniValue& params, bool fHelp)
             "      {\n"
             "        \"address\": \"xxxx\",  (string) MasterWin MN/Budget Address\n"
             "        \"nVotes\": n,        (numeric) Number of votes for winner if payee is a masternode\n"
-            "        \"level\": level,     (numeric) Tier-Level if payee is a masternode\n"
+            "        \"tier\": tier,       (numeric) Tier-Level if payee is a masternode\n"
             "      }\n"
             "      ,...\n"
             "    ]\n"
@@ -895,7 +893,7 @@ UniValue getmasternodewinners (const UniValue& params, bool fHelp)
             
             winner.push_back (Pair ("address", paymentWinner.strAddress));
             winner.push_back (Pair ("nVotes", paymentWinner.nVotes));
-            winner.push_back (Pair ("level", (uint64_t)paymentWinner.masternodeLevel));
+            winner.push_back (Pair ("tier", (uint64_t)paymentWinner.masternodeLevel));
             
             winners.push_back (winner);
         }
@@ -905,7 +903,7 @@ UniValue getmasternodewinners (const UniValue& params, bool fHelp)
             
             winner.push_back (Pair ("address", "Unknown"));
             winner.push_back (Pair ("nVotes", 0));
-            winner.push_back (Pair ("level", 0));
+            winner.push_back (Pair ("tier", 0));
             
             winners.push_back (winner);
         }
@@ -931,7 +929,7 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
             "{\n"
             "  xxxx: [\n   (numeric) Block height\n"
             "    {\n"
-            "      \"level\": level,\n"
+            "      \"tier\": tier,\n"
             "      \"hash\": \"hash\"\n"
             "    },\n"
             "    ...\n"
@@ -957,12 +955,12 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
     for (int nHeight = chainActive.Tip()->nHeight - nLast; nHeight < chainActive.Tip()->nHeight + 20; nHeight++) {
         UniValue block (UniValue::VARR);
         
-        for (unsigned int masternodeLevel = 1; masternodeLevel <= Params ().getMasternodeLevels (); masternodeLevel++) {
+        for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
             uint256 nHigh = 0;
             CMasternode* pBestMasternode = NULL;
             
             BOOST_FOREACH (CMasternode& mn, vMasternodes) {
-                if (mn.GetLevel () != masternodeLevel)
+                if (mn.GetLevel () != masternodeTier)
                     continue;
                 
                 uint256 n = mn.CalculateScore (1, nHeight - 100);
@@ -976,7 +974,7 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
             if (pBestMasternode) {
                 UniValue tier (UniValue::VOBJ);
                 
-                tier.push_back (Pair ("level", (uint64_t)masternodeLevel));
+                tier.push_back (Pair ("tier", (uint64_t)masternodeTier));
                 tier.push_back (Pair ("hash", pBestMasternode->vin.prevout.hash.ToString ().c_str ()));
                 
                 block.push_back (tier);
