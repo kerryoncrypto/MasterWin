@@ -50,11 +50,21 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
             return parts;
 
         // Check if Stake-Output is ours
+        unsigned int nIndexMN = 2;
+        
         if (isminetype mine = wallet->IsMine (wtx.vout [1])) {
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
             sub.type = TransactionRecord::StakeMint;
             sub.address = CBitcoinAddress (address).ToString ();
             sub.credit = wtx.vout [1].nValue - nDebit;
+            
+            while ((sub.credit < 0) && (wtx.vout.size () > nIndexMN)) {
+                if (wtx.vout [1].scriptPubKey != wtx.vout [nIndexMN].scriptPubKey)
+                    break;
+                
+                sub.credit += wtx.vout [nIndexMN].nValue;
+                nIndexMN++;
+            }
             
             parts.append (sub);
         }
@@ -62,7 +72,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
         // Check if one of the masternode-rewards is our (prefered)
         CTxDestination destMN;
         
-        for (int nIndexMN = 2; nIndexMN < wtx.vout.size (); nIndexMN++) {
+        for (; nIndexMN < wtx.vout.size (); nIndexMN++) {
             if (!ExtractDestination (wtx.vout [nIndexMN].scriptPubKey, destMN) ||
                 !IsMine (*wallet, destMN))
                 continue;
