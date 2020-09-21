@@ -26,6 +26,11 @@ struct CDNSSeedData {
     CDNSSeedData(const std::string& strName, const std::string& strHost) : name(strName), host(strHost) {}
 };
 
+struct MasternodeTier {
+    CAmount Collateral;
+    uint16_t Weight;
+};
+
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
  * MasterWin system. There are three: the main network on which people trade goods
@@ -131,8 +136,8 @@ public:
     
     bool isMasternodeCollateral (CAmount nValue) const {
         // Check if the given value is on collateral-list
-        BOOST_FOREACH (const CAmount& tierCollateral, vMasternodeCollateral) {
-            if (nValue == tierCollateral)
+        BOOST_FOREACH (const MasternodeTier& masternodeTier, vMasternodeTiers) {
+            if (nValue == masternodeTier.Collateral)
                 return true;
         }
         
@@ -141,21 +146,44 @@ public:
     }
     
     unsigned int getMasternodeLevels () const {
-        return vMasternodeCollateral.size ();
+        return vMasternodeTiers.size ();
     }
     
     unsigned int getMasternodeLevel (CAmount collateralValue) const {
         unsigned int currentLevel = 0;
         
         // Check if the given value is on collateral-list
-        BOOST_FOREACH (const CAmount& tierCollateral, vMasternodeCollateral) {
+        BOOST_FOREACH (const MasternodeTier& masternodeTier, vMasternodeTiers) {
             currentLevel++;
             
-            if (collateralValue == tierCollateral)
+            if (collateralValue == masternodeTier.Collateral)
                 return currentLevel;
         }
         
         return 0;
+    }
+    
+    unsigned int getMasternodeTierWeight (unsigned int masternodeTier = 0) const {
+      // Make sure the tier is valid
+      if (masternodeTier > vMasternodeTiers.size ())
+        return 0;
+      
+      // Return weight of a given tier
+      if (masternodeTier > 0)
+        return vMasternodeTiers [masternodeTier - 1].Weight;
+      
+      // Collect sum of all tiers
+      unsigned int tierWeightSum = 0;
+      
+      BOOST_FOREACH (const MasternodeTier& masternodeTier, vMasternodeTiers) {
+        tierWeightSum += masternodeTier.Weight;
+      }
+      
+      // Never return something less than one, to prevent divisions by zero
+      if (tierWeightSum < 1)
+        tierWeightSum = 1;
+      
+      return tierWeightSum;
     }
 
 protected:
@@ -222,7 +250,7 @@ protected:
     int nBlockEnforceInvalidUTXO;
     int nBlockZerocoinV2;
     
-    std::vector<CAmount> vMasternodeCollateral;
+    std::vector<MasternodeTier> vMasternodeTiers;
 };
 
 /**

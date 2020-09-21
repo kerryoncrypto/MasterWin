@@ -2001,13 +2001,7 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
 }
 
 int64_t GetMasternodePayment (int nHeight, unsigned int mnLevel, int64_t blockValue, int nMasternodeCount, bool isZMWStake) {
-	int64_t masternodeTotalPayment = GetMasternodePayment (nHeight, blockValue, nMasternodeCount, isZMWStake);
-	unsigned int masternodeLevels = Params ().getMasternodeLevels ();
-	
-	if (masternodeLevels == 0)
-		return 0;
-	
-	return masternodeTotalPayment * (1 << (mnLevel - 1)) / ((1 << masternodeLevels) - 1);
+  return GetMasternodePayment (nHeight, blockValue, nMasternodeCount, isZMWStake) * Params ().getMasternodeTierWeight (mnLevel) / Params ().getMasternodeTierWeight ();
 }
 
 
