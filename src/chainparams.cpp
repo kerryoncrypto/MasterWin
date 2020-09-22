@@ -229,12 +229,31 @@ public:
     });
     
     vMasternodeTiers.push_back ({
-      22222,
+      20301,
       {
         {   1000 * COIN,  5 },
         {   4000 * COIN, 10 },
         {  10000 * COIN, 25 },
         { 100000 * COIN, 60 }
+      }
+    });
+    
+    vMasternodeTiers.push_back ({
+      20600,
+      {
+        {   1000 * COIN,  1 },
+        {   4000 * COIN,  5 },
+        {  10000 * COIN, 12 },
+        { 100000 * COIN, 82 }
+      }
+    });
+    
+    vMasternodeTiers.push_back ({
+      20700,
+      {
+        {   1000 * COIN,  2 },
+        {  10000 * COIN, 14 },
+        { 100000 * COIN, 84 }
       }
     });
   }
