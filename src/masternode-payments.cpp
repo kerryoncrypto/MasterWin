@@ -312,7 +312,7 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
         }
 
         CAmount blockValue = GetBlockValue (pindexPrev->nHeight);
-        CAmount masternodePayment = GetMasternodePayment (pindexPrev->nHeight, masternodeTier, blockValue, 0, fZMWStake);
+        CAmount masternodePayment = GetMasternodePayment (pindexPrev->nHeight + 1, masternodeTier, blockValue, 0, fZMWStake);
         
         if (hasPayment) {
             unsigned int i = txNew.vout.size ();
@@ -328,7 +328,7 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
             ExtractDestination (payee, address1);
             CBitcoinAddress address2 (address1);
             
-            LogPrint ("masternode", "Masternode payment of %s to %s\n", FormatMoney(masternodePayment).c_str (), address2.ToString ().c_str ());
+            LogPrint ("masternode", "Masternode payment of %s to %s\n", FormatMoney (masternodePayment).c_str (), address2.ToString ().c_str ());
         } else if (!fProofOfStake)
             txNew.vout [0].nValue = blockValue - masternodePayment;
     }
@@ -592,7 +592,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
         if (nMaxSignatures < MNPAYMENTS_SIGNATURES_REQUIRED)
             continue;
         
-        requiredMasternodePayment = GetMasternodePayment (nBlockHeight, masternodeTier, nReward, nMasternode_Drift_Count);
+        requiredMasternodePayment = GetMasternodePayment (nBlockHeight, masternodeTier, nReward, nMasternode_Drift_Count, false);
         bool hasLevelPayment = false;
         std::string strPayeesPossible = "";
         
