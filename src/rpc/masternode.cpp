@@ -56,7 +56,7 @@ UniValue getpoolinfo(const UniValue& params, bool fHelp)
     
     UniValue tiers (UniValue::VARR);
     
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (); masternodeTier++) {
         UniValue tier (UniValue::VOBJ);
         
         tier.push_back (Pair ("tier", (uint64_t)masternodeTier));
@@ -381,7 +381,7 @@ UniValue getmasternodecount (const UniValue& params, bool fHelp)
     
     UniValue tiers (UniValue::VARR);
 
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (); masternodeTier++) {
         UniValue tier (UniValue::VOBJ);
         
         nCount = ipv4 = ipv6 = onion = 0;
@@ -454,7 +454,7 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
     
     UniValue tiers (UniValue::VARR);
     
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (); masternodeTier++) {
         if (!(winner = mnodeman.GetCurrentMasternodeOnLevel (masternodeTier, 1)))
             continue;
         
@@ -955,7 +955,7 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
     for (int nHeight = chainActive.Tip()->nHeight - nLast; nHeight < chainActive.Tip()->nHeight + 20; nHeight++) {
         UniValue block (UniValue::VARR);
         
-        for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (); masternodeTier++) {
+        for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (); masternodeTier++) {
             uint256 nHigh = 0;
             CMasternode* pBestMasternode = NULL;
             

@@ -144,32 +144,22 @@ public:
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
   
   bool isMasternodeCollateral (CAmount nValue, unsigned int atBlockHeight = 0) const {
-    if (atBlockHeight == 0) {
-      CBlockIndex* chainTip = chainActive.Tip ();
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
 
-      if (chainTip != NULL)
-        atBlockHeight = chainTip->nHeight;
-    }
+    if (currentTiers == NULL)
+      return false;
     
-    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
-      // Check if this tiers aren't active yet
-      if (masternodeTiers.blockHeight > atBlockHeight)
-        continue;
-      
-      // Check if the given value is on collateral-list
-      BOOST_FOREACH (const MasternodeTier& masternodeTier, masternodeTiers.masternodeTiers) {
-        if (nValue == masternodeTier.Collateral)
-          return true;
-      }
-      
-      break;
+    // Check if the given value is on collateral-list
+    BOOST_FOREACH (const MasternodeTier& masternodeTier, currentTiers->masternodeTiers) {
+      if (nValue == masternodeTier.Collateral)
+        return true;
     }
     
     // Cannot be a valid collateral-value if we get here
     return false;
   }
   
-  unsigned int getMasternodeTiers (unsigned int atBlockHeight = 0) const {
+  MasternodeTiers *getMasternodeTiers (unsigned int atBlockHeight = 0) const {
     if (atBlockHeight == 0) {
       CBlockIndex* chainTip = chainActive.Tip ();
       
@@ -177,82 +167,74 @@ public:
         atBlockHeight = chainTip->nHeight;
     }
     
+    MasternodeTiers *currentTiers = NULL;
+    
     BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
-      // Find first active tiers
       if (masternodeTiers.blockHeight <= atBlockHeight)
-        return masternodeTiers.masternodeTiers.size ();
+        currentTiers = (MasternodeTiers *)&masternodeTiers;
+      else
+        break;
     }
     
-    return 0;
+    return currentTiers;
+  }
+  
+  unsigned int getMasternodeTierCount (unsigned int atBlockHeight = 0) const {
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
+    
+    if (currentTiers == NULL)
+      return 0;
+    
+    return currentTiers->masternodeTiers.size ();
   }
   
   unsigned int getMasternodeTier (CAmount collateralValue, unsigned int atBlockHeight = 0) const {
-    if (atBlockHeight == 0) {
-      CBlockIndex* chainTip = chainActive.Tip ();
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
+    
+    if (currentTiers == NULL)
+      return 0;
+    
+    unsigned int currentLevel = 0;
+    
+    // Check if the given value is on collateral-list
+    BOOST_FOREACH (const MasternodeTier& masternodeTier, currentTiers->masternodeTiers) {
+      currentLevel++;
       
-      if (chainTip != NULL)
-        atBlockHeight = chainTip->nHeight;
+      if (collateralValue == masternodeTier.Collateral)
+        return currentLevel;
     }
     
-    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
-      // Check if this tiers aren't active yet
-      if (masternodeTiers.blockHeight > atBlockHeight)
-        continue;
-      
-      unsigned int currentLevel = 0;
-      
-      // Check if the given value is on collateral-list
-      BOOST_FOREACH (const MasternodeTier& masternodeTier, masternodeTiers.masternodeTiers) {
-        currentLevel++;
-        
-        if (collateralValue == masternodeTier.Collateral)
-          return currentLevel;
-      }
-      
-      break;
-    }
-      
     return 0;
   }
   
   unsigned int getMasternodeTierWeight (unsigned int masternodeTier = 0, unsigned int atBlockHeight = 0) const {
-    if (atBlockHeight == 0) {
-      CBlockIndex* chainTip = chainActive.Tip ();
-      
-      if (chainTip != NULL)
-        atBlockHeight = chainTip->nHeight;
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
+    
+    if (currentTiers == NULL)
+      return (masternodeTier == 0 ? 1 : 0);
+    
+    // Make sure the tier is valid
+    if (masternodeTier > currentTiers->masternodeTiers.size ())
+      return 0;
+    
+    // Return weight of a given tier
+    if (masternodeTier > 0)
+      return currentTiers->masternodeTiers [masternodeTier - 1].Weight;
+    
+    // Collect sum of all tiers
+    unsigned int tierWeightSum = 0;
+    
+    BOOST_FOREACH (const MasternodeTier& masternodeTier, currentTiers->masternodeTiers) {
+      tierWeightSum += masternodeTier.Weight;
     }
     
-    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
-      // Check if this tiers aren't active yet
-      if (masternodeTiers.blockHeight > atBlockHeight)
-        continue;
-      
-      // Make sure the tier is valid
-      if (masternodeTier > masternodeTiers.masternodeTiers.size ())
-        return 0;
-      
-      // Return weight of a given tier
-      if (masternodeTier > 0)
-        return masternodeTiers.masternodeTiers [masternodeTier - 1].Weight;
-      
-      // Collect sum of all tiers
-      unsigned int tierWeightSum = 0;
-      
-      BOOST_FOREACH (const MasternodeTier& masternodeTier, masternodeTiers.masternodeTiers) {
-        tierWeightSum += masternodeTier.Weight;
-      }
-      
-      // Never return something less than one, to prevent divisions by zero
-      if (tierWeightSum < 1)
-        tierWeightSum = 1;
-      
-      return tierWeightSum;
-    }
+    // Never return something less than one, to prevent divisions by zero
+    if (tierWeightSum < 1)
+      tierWeightSum = 1;
     
-    return (masternodeTier == 0 ? 1 : 0);
+    return tierWeightSum;
   }
-
+  
 protected:
     CChainParams() {}
 

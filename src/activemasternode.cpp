@@ -317,7 +317,7 @@ bool CActiveMasternode::GetMasterNodeVin(CTxIn& vin, CPubKey& pubkey, CKey& secr
         selectedOutput = &possibleCoins [0];
         
         unsigned int selectedTier = Params ().getMasternodeTier (selectedOutput->tx->vout [selectedOutput->i].nValue);
-        unsigned int maxTier = Params ().getMasternodeTiers ();
+        unsigned int maxTier = Params ().getMasternodeTierCount ();
         
         BOOST_FOREACH (COutput& out, possibleCoins) {
             if (selectedTier == maxTier)

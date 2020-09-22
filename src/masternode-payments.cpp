@@ -297,7 +297,7 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, int64_t nFe
     bool hasPayment = true;
     CScript payee;
     
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (pindexPrev->nHeight + 1); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (pindexPrev->nHeight + 1); masternodeTier++) {
         hasPayment = true;
         
         if (!masternodePayments.GetBlockPayee (pindexPrev->nHeight + 1, masternodeTier, payee)) {
@@ -578,7 +578,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     bool transactionCorrect = true;
     CAmount requiredMasternodePayment = 0;
 
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (nBlockHeight); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (nBlockHeight); masternodeTier++) {
         // Require at least 6 signatures
         int nMaxSignatures = 0;
         
@@ -780,7 +780,7 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
         return false;
     }
     
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTiers (nBlockHeight); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (nBlockHeight); masternodeTier++) {
         // Create a new winner for this level
         CMasternodePaymentWinner newWinner (activeMasternode.vin);
         
