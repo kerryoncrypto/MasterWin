@@ -227,6 +227,16 @@ public:
         { 100000 * COIN, 8 }
       }
     });
+    
+    vMasternodeTiers.push_back ({
+      22222,
+      {
+        {   1000 * COIN,  5 },
+        {   4000 * COIN, 10 },
+        {  10000 * COIN, 25 },
+        { 100000 * COIN, 60 }
+      }
+    });
   }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
