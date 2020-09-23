@@ -127,7 +127,7 @@ CMasternode::CMasternode(const CMasternodeBroadcast& mnb)
     lastTimeChecked = 0;
 }
 
-unsigned int CMasternode::GetLevel () {
+unsigned int CMasternode::GetTier (unsigned int atBlockHeight) {
     CTransaction prevTx;
     uint256 hashBlock = 0;
     
@@ -137,7 +137,7 @@ unsigned int CMasternode::GetLevel () {
     if (vin.prevout.n >= prevTx.vout.size ())
         return 0;
     
-    return Params ().getMasternodeTier (prevTx.vout [vin.prevout.n].nValue);
+    return Params ().getMasternodeTier (prevTx.vout [vin.prevout.n].nValue, atBlockHeight);
 }
 
 //
@@ -277,7 +277,7 @@ int64_t CMasternode::GetLastPaid()
 
     const CBlockIndex* BlockReading = chainActive.Tip();
 
-    int nMnCount = mnodeman.CountEnabledOnLevel (GetLevel ()) * 1.25;
+    int nMnCount = mnodeman.CountEnabledOnLevel (GetTier ()) * 1.25;
     int n = 0;
     for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
         if (n >= nMnCount) {

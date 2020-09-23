@@ -508,7 +508,7 @@ bool CMasternodePayments::IsScheduled (CMasternode& mn, int mnLevelCount, int nN
     
     CScript mnPayee;
     CScript payee;
-    unsigned int masternodeLevel = mn.GetLevel ();
+    unsigned int masternodeLevel = mn.GetTier ();
     
     mnPayee = GetScriptForDestination (mn.pubKeyCollateralAddress.GetID());
     
@@ -780,13 +780,13 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
         return false;
     }
     
-    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (nBlockHeight); masternodeTier++) {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (nBlockHeight + 1); masternodeTier++) {
         // Create a new winner for this level
         CMasternodePaymentWinner newWinner (activeMasternode.vin);
         
         // pay to the oldest MN that still had no payment but its input is old enough and it was active long enough
         int nCount = 0;
-        CMasternode* pmn = mnodeman.GetNextMasternodeInQueueForPayment (nBlockHeight, masternodeTier, true, nCount);
+        CMasternode* pmn = mnodeman.GetNextMasternodeInQueueForPayment (nBlockHeight + 1, masternodeTier, true, nCount);
         
         if (pmn == NULL) {
             LogPrint ("masternode", "CMasternodePayments::ProcessBlock() Failed to find masternode to pay\n");

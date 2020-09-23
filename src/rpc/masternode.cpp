@@ -279,7 +279,7 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             CNetAddr node = CNetAddr(strHost, false);
             std::string strNetwork = GetNetworkName(node.GetNetwork());
 
-            obj.push_back (Pair ("tier", (uint64_t)mn->GetLevel ()));
+            obj.push_back (Pair ("tier", (uint64_t)mn->GetTier ()));
             obj.push_back(Pair("rank", (strStatus == "ENABLED" ? s.first : 0)));
             obj.push_back(Pair("network", strNetwork));
             obj.push_back(Pair("txhash", strTxHash));
@@ -828,7 +828,7 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
         mnObj.push_back(Pair("addr", CBitcoinAddress(pmn->pubKeyCollateralAddress.GetID()).ToString()));
         mnObj.push_back(Pair("status", activeMasternode.status));
         mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
-        mnObj.push_back (Pair ("tier", (uint64_t)pmn->GetLevel ()));
+        mnObj.push_back (Pair ("tier", (uint64_t)pmn->GetTier ()));
         
         return mnObj;
     }
@@ -960,7 +960,7 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
             CMasternode* pBestMasternode = NULL;
             
             BOOST_FOREACH (CMasternode& mn, vMasternodes) {
-                if (mn.GetLevel () != masternodeTier)
+                if (mn.GetTier () != masternodeTier)
                     continue;
                 
                 uint256 n = mn.CalculateScore (1, nHeight - 100);

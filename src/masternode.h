@@ -149,7 +149,7 @@ public:
     CMasternode(const CMasternode& other);
     CMasternode(const CMasternodeBroadcast& mnb);
 
-    unsigned int GetLevel ();
+    unsigned int GetTier (unsigned int atBlockHeight = 0);
 
     void swap(CMasternode& first, CMasternode& second) // nothrow
     {
