@@ -79,8 +79,6 @@ CMasternode::CMasternode()
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
     lastTimeChecked = 0;
-    nLastDsee = 0;  // temporary, do not save. Remove after migration to v12
-    nLastDseep = 0; // temporary, do not save. Remove after migration to v12
 }
 
 CMasternode::CMasternode(const CMasternode& other)
@@ -104,8 +102,6 @@ CMasternode::CMasternode(const CMasternode& other)
     nScanningErrorCount = other.nScanningErrorCount;
     nLastScanningErrorBlockHeight = other.nLastScanningErrorBlockHeight;
     lastTimeChecked = 0;
-    nLastDsee = other.nLastDsee;   // temporary, do not save. Remove after migration to v12
-    nLastDseep = other.nLastDseep; // temporary, do not save. Remove after migration to v12
 }
 
 CMasternode::CMasternode(const CMasternodeBroadcast& mnb)
@@ -129,8 +125,19 @@ CMasternode::CMasternode(const CMasternodeBroadcast& mnb)
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
     lastTimeChecked = 0;
-    nLastDsee = 0;  // temporary, do not save. Remove after migration to v12
-    nLastDseep = 0; // temporary, do not save. Remove after migration to v12
+}
+
+unsigned int CMasternode::GetTier (unsigned int atBlockHeight) {
+    CTransaction prevTx;
+    uint256 hashBlock = 0;
+    
+    if (!GetTransaction (vin.prevout.hash, prevTx, hashBlock, true))
+        return 0;
+    
+    if (vin.prevout.n >= prevTx.vout.size ())
+        return 0;
+    
+    return Params ().getMasternodeTier (prevTx.vout [vin.prevout.n].nValue, atBlockHeight);
 }
 
 //
@@ -215,20 +222,17 @@ void CMasternode::Check(bool forceCheck)
     }
 
     if (!unitTest) {
-        CValidationState state;
-        CMutableTransaction tx = CMutableTransaction();
-        CTxOut vout = CTxOut(3999.99 * COIN, obfuScationPool.collateralPubKey);
-        tx.vin.push_back(vin);
-        tx.vout.push_back(vout);
-
-        {
-            TRY_LOCK(cs_main, lockMain);
-            if (!lockMain) return;
-
-            if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
-                activeState = MASTERNODE_VIN_SPENT;
-                return;
-            }
+        TRY_LOCK (cs_main, lockMain);
+        if (!lockMain)
+            return;
+        
+        CCoinsViewCache cache (pcoinsTip);
+        const CCoins* coins = cache.AccessCoins (vin.prevout.hash);
+        
+        if (!coins || !coins->IsAvailable (vin.prevout.n) || !Params ().isMasternodeCollateral (coins->vout [vin.prevout.n].nValue)) {
+            activeState = MASTERNODE_VIN_SPENT;
+            
+            return;
         }
     }
 
@@ -273,7 +277,7 @@ int64_t CMasternode::GetLastPaid()
 
     const CBlockIndex* BlockReading = chainActive.Tip();
 
-    int nMnCount = mnodeman.CountEnabled() * 1.25;
+    int nMnCount = mnodeman.CountEnabledOnLevel (GetTier ()) * 1.25;
     int n = 0;
     for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
         if (n >= nMnCount) {
@@ -528,8 +532,8 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
     }
 
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (addr.GetPort() != 33555) return false;
-    } else if (addr.GetPort() == 33555)
+        if (addr.GetPort() != Params ().GetDefaultPort ()) return false;
+    } else if (addr.GetPort() == Params ().GetDefaultPort ())
         return false;
 
     //search existing Masternode list, this is where we update existing Masternodes with new mnb broadcasts
@@ -586,11 +590,6 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     }
 
     CValidationState state;
-    CMutableTransaction tx = CMutableTransaction();
-    CTxOut vout = CTxOut(3999.99 * COIN, obfuScationPool.collateralPubKey);
-    tx.vin.push_back(vin);
-    tx.vout.push_back(vout);
-
     {
         TRY_LOCK(cs_main, lockMain);
         if (!lockMain) {
@@ -600,7 +599,10 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             return false;
         }
 
-        if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
+        CCoinsViewCache cache (pcoinsTip);
+        const CCoins* coins = cache.AccessCoins (vin.prevout.hash);
+        
+        if (!coins || !coins->IsAvailable (vin.prevout.n) || !Params ().isMasternodeCollateral (coins->vout [vin.prevout.n].nValue)) {
             //set nDos
             state.IsInvalid(nDoS);
             return false;

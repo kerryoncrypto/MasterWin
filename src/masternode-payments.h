@@ -27,9 +27,16 @@ extern CMasternodePayments masternodePayments;
 #define MNPAYMENTS_SIGNATURES_REQUIRED 6
 #define MNPAYMENTS_SIGNATURES_TOTAL 10
 
+class CPaymentWinner {
+    public:
+        std::string strAddress;
+        uint64_t nVotes;
+        unsigned int masternodeLevel;
+};
+
 void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight);
-std::string GetRequiredPaymentsString(int nBlockHeight);
+std::vector<CPaymentWinner> GetRequiredPayments (int nBlockHeight);
 bool IsBlockValueValid(const CBlock& block, CAmount nExpectedValue, CAmount nMinted);
 void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake, bool fZMWStake);
 
@@ -63,17 +70,26 @@ class CMasternodePayee
 {
 public:
     CScript scriptPubKey;
+    unsigned int masternodeLevel;
     int nVotes;
 
     CMasternodePayee()
     {
         scriptPubKey = CScript();
+        masternodeLevel = 0;
         nVotes = 0;
     }
 
     CMasternodePayee(CScript payee, int nVotesIn)
     {
         scriptPubKey = payee;
+        masternodeLevel = 0;
+        nVotes = nVotesIn;
+    }
+    
+    CMasternodePayee(CScript payee, unsigned int nLevel, int nVotesIn) {
+        scriptPubKey = payee;
+        masternodeLevel = nLevel;
         nVotes = nVotesIn;
     }
 
@@ -83,6 +99,7 @@ public:
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
     {
         READWRITE(scriptPubKey);
+        READWRITE (masternodeLevel);
         READWRITE(nVotes);
     }
 };
@@ -119,6 +136,22 @@ public:
         CMasternodePayee c(payeeIn, nIncrement);
         vecPayments.push_back(c);
     }
+    
+    void AddPayee (CScript payeeIn, unsigned int masternodeLevel, int nIncrement) {
+        LOCK (cs_vecPayments);
+        
+        BOOST_FOREACH (CMasternodePayee& payee, vecPayments) {
+            if ((payee.scriptPubKey == payeeIn) &&
+                (payee.masternodeLevel == masternodeLevel)) {
+                payee.nVotes += nIncrement;
+                
+                return;
+            }
+        }
+        
+        CMasternodePayee c (payeeIn, masternodeLevel, nIncrement);
+        vecPayments.push_back (c);
+    }
 
     bool GetPayee(CScript& payee)
     {
@@ -134,6 +167,22 @@ public:
 
         return (nVotes > -1);
     }
+    
+    bool GetPayee (CScript& payee, unsigned int masternodeLevel) {
+        LOCK (cs_vecPayments);
+        
+        int nVotes = -1;
+        
+        BOOST_FOREACH (CMasternodePayee& p, vecPayments) {
+            if ((p.masternodeLevel == masternodeLevel) &&
+                (p.nVotes > nVotes)) {
+                payee = p.scriptPubKey;
+                nVotes = p.nVotes;
+            }
+        }
+        
+        return (nVotes > -1);
+    }
 
     bool HasPayeeWithVotes(CScript payee, int nVotesReq)
     {
@@ -147,7 +196,7 @@ public:
     }
 
     bool IsTransactionValid(const CTransaction& txNew);
-    std::string GetRequiredPaymentsString();
+    std::vector<CPaymentWinner> GetRequiredPayments ();
 
     ADD_SERIALIZE_METHODS;
 
@@ -192,14 +241,14 @@ public:
 
         return ss.GetHash();
     }
-
+    
+    unsigned int GetTier ();
     bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
     bool IsValid(CNode* pnode, std::string& strError);
     bool SignatureValid();
     void Relay();
 
-    void AddPayee(CScript payeeIn)
-    {
+    void AddPayee (CScript payeeIn) {
         payee = payeeIn;
     }
 
@@ -220,7 +269,7 @@ public:
         std::string ret = "";
         ret += vinMasternode.ToString();
         ret += ", " + boost::lexical_cast<std::string>(nBlockHeight);
-        ret += ", " + payee.ToString();
+        ret += ", " + payee.ToString() + "@" + boost::lexical_cast<std::string>(GetTier ());
         ret += ", " + boost::lexical_cast<std::string>((int)vchSig.size());
         return ret;
     }
@@ -263,8 +312,10 @@ public:
     int LastPayment(CMasternode& mn);
 
     bool GetBlockPayee(int nBlockHeight, CScript& payee);
+    bool GetBlockPayee (int nBlockHeight, unsigned mnlevel, CScript& payee);
     bool IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     bool IsScheduled(CMasternode& mn, int nNotBlockHeight);
+    bool IsScheduled (CMasternode& mn, int mnLevelCount, int nNotBlockHeight);
 
     bool CanVote(COutPoint outMasternode, int nBlockHeight)
     {
@@ -280,10 +331,25 @@ public:
         mapMasternodesLastVote[outMasternode.hash + outMasternode.n] = nBlockHeight;
         return true;
     }
+    
+    bool CanVote (const COutPoint& outMasternode, unsigned int mnLevel, int nBlockHeight) {
+        LOCK (cs_mapMasternodePayeeVotes);
+        
+        uint256 key = ((outMasternode.hash + outMasternode.n) << 4) + mnLevel;
+        
+        if (mapMasternodesLastVote.count (key)) {
+            if (mapMasternodesLastVote [key] == nBlockHeight)
+                return false;
+        }
+        
+        mapMasternodesLastVote [key] = nBlockHeight;
+        
+        return true;
+    }
 
     int GetMinMasternodePaymentsProto();
     void ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
-    std::string GetRequiredPaymentsString(int nBlockHeight);
+    std::vector<CPaymentWinner> GetRequiredPayments (int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, int64_t nFees, bool fProofOfStake, bool fZMWStake);
     std::string ToString() const;
     int GetOldestBlock();

@@ -14,9 +14,11 @@
 #include "primitives/block.h"
 #include "protocol.h"
 #include "uint256.h"
+#include "chain.h"
 
 #include "libzerocoin/Params.h"
 #include <vector>
+#include <boost/foreach.hpp>
 
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 
@@ -24,6 +26,19 @@ struct CDNSSeedData {
     std::string name, host;
     CDNSSeedData(const std::string& strName, const std::string& strHost) : name(strName), host(strHost) {}
 };
+
+struct MasternodeTier {
+  CAmount Collateral;
+  uint16_t Weight;
+};
+
+struct MasternodeTiers {
+  unsigned int blockHeight;
+  std::vector<MasternodeTier> masternodeTiers;
+};
+
+/** The currently-connected chain of blocks. */
+extern CChain chainActive;
 
 /**
  * CChainParams defines various tweakable parameters of a given instance of the
@@ -127,7 +142,99 @@ public:
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
+  
+  bool isMasternodeCollateral (CAmount nValue, unsigned int atBlockHeight = 0) const {
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
 
+    if (currentTiers == NULL)
+      return false;
+    
+    // Check if the given value is on collateral-list
+    BOOST_FOREACH (const MasternodeTier& masternodeTier, currentTiers->masternodeTiers) {
+      if (nValue == masternodeTier.Collateral)
+        return true;
+    }
+    
+    // Cannot be a valid collateral-value if we get here
+    return false;
+  }
+  
+  MasternodeTiers *getMasternodeTiers (unsigned int atBlockHeight = 0) const {
+    if (atBlockHeight == 0) {
+      CBlockIndex* chainTip = chainActive.Tip ();
+      
+      if (chainTip != NULL)
+        atBlockHeight = chainTip->nHeight;
+    }
+    
+    MasternodeTiers *currentTiers = NULL;
+    
+    BOOST_FOREACH (const MasternodeTiers& masternodeTiers, vMasternodeTiers) {
+      if (masternodeTiers.blockHeight <= atBlockHeight)
+        currentTiers = (MasternodeTiers *)&masternodeTiers;
+      else
+        break;
+    }
+    
+    return currentTiers;
+  }
+  
+  unsigned int getMasternodeTierCount (unsigned int atBlockHeight = 0) const {
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
+    
+    if (currentTiers == NULL)
+      return 0;
+    
+    return currentTiers->masternodeTiers.size ();
+  }
+  
+  unsigned int getMasternodeTier (CAmount collateralValue, unsigned int atBlockHeight = 0) const {
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
+    
+    if (currentTiers == NULL)
+      return 0;
+    
+    unsigned int currentLevel = 0;
+    
+    // Check if the given value is on collateral-list
+    BOOST_FOREACH (const MasternodeTier& masternodeTier, currentTiers->masternodeTiers) {
+      currentLevel++;
+      
+      if (collateralValue == masternodeTier.Collateral)
+        return currentLevel;
+    }
+    
+    return 0;
+  }
+  
+  unsigned int getMasternodeTierWeight (unsigned int masternodeTier = 0, unsigned int atBlockHeight = 0) const {
+    MasternodeTiers *currentTiers = getMasternodeTiers (atBlockHeight);
+    
+    if (currentTiers == NULL)
+      return (masternodeTier == 0 ? 1 : 0);
+    
+    // Make sure the tier is valid
+    if (masternodeTier > currentTiers->masternodeTiers.size ())
+      return 0;
+    
+    // Return weight of a given tier
+    if (masternodeTier > 0)
+      return currentTiers->masternodeTiers [masternodeTier - 1].Weight;
+    
+    // Collect sum of all tiers
+    unsigned int tierWeightSum = 0;
+    
+    BOOST_FOREACH (const MasternodeTier& masternodeTier, currentTiers->masternodeTiers) {
+      tierWeightSum += masternodeTier.Weight;
+    }
+    
+    // Never return something less than one, to prevent divisions by zero
+    if (tierWeightSum < 1)
+      tierWeightSum = 1;
+    
+    return tierWeightSum;
+  }
+  
 protected:
     CChainParams() {}
 
@@ -191,6 +298,8 @@ protected:
     int nBlockLastGoodCheckpoint;
     int nBlockEnforceInvalidUTXO;
     int nBlockZerocoinV2;
+    
+    std::vector<MasternodeTiers> vMasternodeTiers;
 };
 
 /**

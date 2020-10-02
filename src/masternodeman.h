@@ -111,8 +111,10 @@ public:
     void Clear();
 
     int CountEnabled(int protocolVersion = -1);
+    int CountEnabledOnLevel (unsigned int mnLevel, int protocolVersion = -1);
 
     void CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion);
+    void CountNetworks (unsigned int masternodeLevel, int protocolVersion, int& ipv4, int& ipv6, int& onion);
 
     void DsegUpdate(CNode* pnode);
 
@@ -123,12 +125,14 @@ public:
 
     /// Find an entry in the masternode list that is next to be paid
     CMasternode* GetNextMasternodeInQueueForPayment(int nBlockHeight, bool fFilterSigTime, int& nCount);
+    CMasternode* GetNextMasternodeInQueueForPayment (int nBlockHeight, unsigned int masternodeLevel, bool fFilterSigTime, int& nCount);
 
     /// Find a random entry
     CMasternode* FindRandomNotInVec(std::vector<CTxIn>& vecToExclude, int protocolVersion = -1);
 
     /// Get the current winner for this block
     CMasternode* GetCurrentMasterNode(int mod = 1, int64_t nBlockHeight = 0, int minProtocol = 0);
+    CMasternode* GetCurrentMasternodeOnLevel (unsigned int masternodeLevel, int mod = 1, int64_t nBlockHeight = 0, int minProtocol = 0);
 
     std::vector<CMasternode> GetFullMasternodeVector()
     {
@@ -145,10 +149,24 @@ public:
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
     /// Return the number of (unique) Masternodes
-    int size() { return vMasternodes.size(); }
+    int size () {
+        return vMasternodes.size();
+    }
+    
+    int size (unsigned int masternodeLevel) {
+        int masternodeCount = 0;
+        
+        BOOST_FOREACH (CMasternode masternode, vMasternodes) {
+            if (masternode.GetTier () == masternodeLevel)
+                masternodeCount++;
+        }
+        
+        return masternodeCount;
+    }
 
     /// Return the number of Masternodes older than (default) 8000 seconds
     int stable_size ();
+    int stable_size (unsigned int masternodeLevel);
 
     std::string ToString() const;
 

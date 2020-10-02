@@ -257,6 +257,11 @@
                   </column>
                   <column>
                    <property name="text">
+                    <string>Level</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
                     <string>Status</string>
                    </property>
                   </column>

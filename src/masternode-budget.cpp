@@ -882,33 +882,32 @@ std::vector<CFinalizedBudget*> CBudgetManager::GetFinalizedBudgets()
     return vFinalizedBudgetsRet;
 }
 
-std::string CBudgetManager::GetRequiredPaymentsString(int nBlockHeight)
-{
-    LOCK(cs);
-
-    std::string ret = "unknown-budget";
-
-    std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
-    while (it != mapFinalizedBudgets.end()) {
+std::vector<CPaymentWinner> CBudgetManager::GetRequiredPayments (int nBlockHeight) {
+    LOCK (cs);
+    
+    std::vector<CPaymentWinner> vPaymentWinners;
+    std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin ();
+    
+    while (it != mapFinalizedBudgets.end ()) {
         CFinalizedBudget* pfinalizedBudget = &((*it).second);
-        if (nBlockHeight >= pfinalizedBudget->GetBlockStart() && nBlockHeight <= pfinalizedBudget->GetBlockEnd()) {
+        
+        if ((nBlockHeight >= pfinalizedBudget->GetBlockStart ()) && (nBlockHeight <= pfinalizedBudget->GetBlockEnd ())) {
             CTxBudgetPayment payment;
-            if (pfinalizedBudget->GetBudgetPaymentByBlock(nBlockHeight, payment)) {
-                if (ret == "unknown-budget") {
-                    ret = payment.nProposalHash.ToString();
-                } else {
-                    ret += ",";
-                    ret += payment.nProposalHash.ToString();
-                }
-            } else {
-                LogPrint("mnbudget","CBudgetManager::GetRequiredPaymentsString - Couldn't find budget payment for block %d\n", nBlockHeight);
-            }
+            
+            if (pfinalizedBudget->GetBudgetPaymentByBlock (nBlockHeight, payment)) {
+                CPaymentWinner paymentWinner;
+                
+                paymentWinner.strAddress = payment.nProposalHash.ToString ();
+                
+                vPaymentWinners.push_back (paymentWinner);
+            } else
+                LogPrint ("mnbudget","CBudgetManager::GetRequiredPaymentsString - Couldn't find budget payment for block %d\n", nBlockHeight);
         }
-
+        
         ++it;
     }
-
-    return ret;
+    
+    return vPaymentWinners;
 }
 
 CAmount CBudgetManager::GetTotalBudget(int nHeight)

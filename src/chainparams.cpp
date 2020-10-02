@@ -217,7 +217,14 @@ public:
         blacklistedAddresses = std::set<std::string>{
             "MUqGH9fvKxjSSJhLQuKMM1yD8EsuZnc6P3",
         };
-    }
+        
+    vMasternodeTiers.push_back ({
+      nLastPOWBlock,
+      {
+        {   4000 * COIN, 1 }
+      }
+    });
+  }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
     {

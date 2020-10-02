@@ -16,6 +16,7 @@
 #include "sync.h"
 #include "util.h"
 #include <boost/lexical_cast.hpp>
+#include "masternode-payments.h"
 
 using namespace std;
 
@@ -244,7 +245,7 @@ public:
     bool UpdateFinalizedBudget(CFinalizedBudgetVote& vote, CNode* pfrom, std::string& strError);
     bool PropExists(uint256 nHash);
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
-    std::string GetRequiredPaymentsString(int nBlockHeight);
+    std::vector<CPaymentWinner> GetRequiredPayments (int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake);
 
     void CheckOrphanVotes();

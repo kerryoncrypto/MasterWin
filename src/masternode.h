@@ -72,7 +72,7 @@ public:
         ss << sigTime;
         return ss.GetHash();
     }
-
+    
     void swap(CMasternodePing& first, CMasternodePing& second) // nothrow
     {
         // enable ADL (not necessary in our case, but good practice)
@@ -145,13 +145,11 @@ public:
     int nLastScanningErrorBlockHeight;
     CMasternodePing lastPing;
 
-    int64_t nLastDsee;  // temporary, do not save. Remove after migration to v12
-    int64_t nLastDseep; // temporary, do not save. Remove after migration to v12
-
     CMasternode();
     CMasternode(const CMasternode& other);
     CMasternode(const CMasternodeBroadcast& mnb);
 
+    unsigned int GetTier (unsigned int atBlockHeight = 0);
 
     void swap(CMasternode& first, CMasternode& second) // nothrow
     {
