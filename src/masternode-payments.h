@@ -216,7 +216,6 @@ public:
 
     int nBlockHeight;
     CScript payee;
-    unsigned int masternodeLevel;
     std::vector<unsigned char> vchSig;
 
     CMasternodePaymentWinner()
@@ -224,7 +223,6 @@ public:
         nBlockHeight = 0;
         vinMasternode = CTxIn();
         payee = CScript();
-        masternodeLevel = 0;
     }
 
     CMasternodePaymentWinner(CTxIn vinIn)
@@ -232,7 +230,6 @@ public:
         nBlockHeight = 0;
         vinMasternode = vinIn;
         payee = CScript();
-        masternodeLevel = 0;
     }
 
     uint256 GetHash()
@@ -241,24 +238,18 @@ public:
         ss << payee;
         ss << nBlockHeight;
         ss << vinMasternode.prevout;
-        ss << masternodeLevel;
 
         return ss.GetHash();
     }
-
+    
+    unsigned int GetTier ();
     bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
     bool IsValid(CNode* pnode, std::string& strError);
     bool SignatureValid();
     void Relay();
 
-    void AddPayee(CScript payeeIn)
-    {
+    void AddPayee (CScript payeeIn) {
         payee = payeeIn;
-    }
-    
-    void AddPayee (CScript payeeIn, unsigned int mnLevel) {
-        payee = payeeIn;
-        masternodeLevel = mnLevel;
     }
 
 
@@ -270,7 +261,6 @@ public:
         READWRITE(vinMasternode);
         READWRITE(nBlockHeight);
         READWRITE(payee);
-        READWRITE(masternodeLevel);
         READWRITE(vchSig);
     }
 
@@ -279,7 +269,7 @@ public:
         std::string ret = "";
         ret += vinMasternode.ToString();
         ret += ", " + boost::lexical_cast<std::string>(nBlockHeight);
-        ret += ", " + payee.ToString() + "@" + boost::lexical_cast<std::string>(masternodeLevel);
+        ret += ", " + payee.ToString() + "@" + boost::lexical_cast<std::string>(GetTier ());
         ret += ", " + boost::lexical_cast<std::string>((int)vchSig.size());
         return ret;
     }

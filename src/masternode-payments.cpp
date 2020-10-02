@@ -372,6 +372,17 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
         vRecv >> winner;
 
         if (pfrom->nVersion < ActiveProtocol()) return;
+        
+        if (winner.GetTier () == 0) {
+            LogPrintf ("CMasternodePayments::ProcessMessageMasternodePayments() : mnw - Could not find tier of masternode \n");
+            
+            if (masternodeSync.IsSynced ())
+                Misbehaving (pfrom->GetId (), 20);
+            
+            mnodeman.AskForMN (pfrom, winner.vinMasternode);
+            
+            return;
+        }
 
         int nHeight;
         {
@@ -390,7 +401,7 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             return;
         }
 
-        int nFirstBlock = nHeight - int (mnodeman.CountEnabledOnLevel (winner.masternodeLevel) * 1.25);
+        int nFirstBlock = nHeight - int (mnodeman.CountEnabledOnLevel (winner.GetTier ()) * 1.25);
         
         if (winner.nBlockHeight < nFirstBlock || winner.nBlockHeight > nHeight + 20) {
             LogPrint("mnpayments", "mnw - winner out of range - FirstBlock %d Height %d bestHeight %d\n", nFirstBlock, winner.nBlockHeight, nHeight);
@@ -403,7 +414,7 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             return;
         }
 
-        if (!masternodePayments.CanVote  (winner.vinMasternode.prevout, winner.masternodeLevel, winner.nBlockHeight)) {
+        if (!masternodePayments.CanVote  (winner.vinMasternode.prevout, winner.GetTier (), winner.nBlockHeight)) {
             //  LogPrint("masternode","mnw - masternode already voted - %s\n", winner.vinMasternode.prevout.ToStringShort());
             return;
         }
@@ -417,12 +428,21 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             mnodeman.AskForMN(pfrom, winner.vinMasternode);
             return;
         }
-
+        
         if (masternodePayments.AddWinningMasternode(winner)) {
             winner.Relay();
             masternodeSync.AddedMasternodeWinner(winner.GetHash());
         }
     }
+}
+
+unsigned int CMasternodePaymentWinner::GetTier () {
+    CMasternode* pmn = mnodeman.Find (vinMasternode);
+    
+    if (pmn)
+        return pmn->GetTier ();
+    
+    return 0;
 }
 
 bool CMasternodePaymentWinner::Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode)
@@ -552,7 +572,7 @@ bool CMasternodePayments::AddWinningMasternode(CMasternodePaymentWinner& winnerI
         }
     }
 
-    mapMasternodeBlocks [winnerIn.nBlockHeight].AddPayee (winnerIn.payee, winnerIn.masternodeLevel, 1);
+    mapMasternodeBlocks [winnerIn.nBlockHeight].AddPayee (winnerIn.payee, winnerIn.GetTier (), 1);
 
     return true;
 }
@@ -584,7 +604,6 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
         
         for (CMasternodePayee& payee : vecPayments)
             if ((payee.nVotes >= nMaxSignatures) &&
-                (payee.nVotes >= MNPAYMENTS_SIGNATURES_REQUIRED) &&
                 (payee.masternodeLevel == masternodeTier))
                 nMaxSignatures = payee.nVotes;
         
@@ -593,6 +612,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
             continue;
         
         requiredMasternodePayment = GetMasternodePayment (nBlockHeight, masternodeTier, nReward, nMasternode_Drift_Count, false);
+        
         bool hasLevelPayment = false;
         std::string strPayeesPossible = "";
         
@@ -610,6 +630,7 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
                 if (payee.scriptPubKey == out.scriptPubKey) {
                     if(out.nValue >= requiredMasternodePayment) {
                         hasLevelPayment = true;
+                        LogPrintf ("Found payment of %s on tier %d at %d\n", FormatMoney (out.nValue).c_str (), masternodeTier, nBlockHeight);
                         
                         break;
                     } else
@@ -799,7 +820,7 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
         newWinner.nBlockHeight = nBlockHeight;
         
         CScript payee = GetScriptForDestination (pmn->pubKeyCollateralAddress.GetID());
-        newWinner.AddPayee (payee, masternodeTier);
+        newWinner.AddPayee (payee);
         
         CTxDestination address1;
         ExtractDestination (payee, address1);
