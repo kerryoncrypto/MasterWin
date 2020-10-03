@@ -1,9 +1,9 @@
 Exchange:
 - [Crex24 MW/BTC](https://crex24.com/exchange/MW-BTC) ![Alt text](https://masterwin.online/github/702868454700482590.png? "Crex24")
-- [SouthXchange](https://www.southxchange.com/Market/Book/MW/BTC) ![Alt text](https://masterwin.online/github/703836695946068019.png? "SouthXchange")
 - [Graviex MW/BTC](https://graviex.net/markets/mwbtc) ![Alt text](https://masterwin.online/github/703836702308827146.png? "Graviex")
 - [Graviex MW/LTC](https://graviex.net/markets/mwltc) ![Alt text](https://masterwin.online/github/703836702308827146.png? "Graviex")
 - [Graviex MW/DOGE](https://graviex.net/markets/mwdoge) ![Alt text](https://masterwin.online/github/703836702308827146.png? "Graviex")
+- [SouthXchange MW/BTC](https://www.southxchange.com/Market/Book/MW/BTC) ![Alt text](https://masterwin.online/github/703836695946068019.png? "SouthXchange")
 - [Midas MW/BTC](https://midas.investments/exchange/MW/BTC) ![Alt text](https://masterwin.online/github/703836697741230091.png? "Midas")
 - [DelionDEX MW/BTC](https://dex.delion.online/market/DELION.MW_DELION.BTC) ![Alt text](https://masterwin.online/github/703836701151199242.png? "DelionDEX")
 - [DelionDEX MW/DLN](https://dex.delion.online/market/DELION.MW_DELION.DLN) ![Alt text](https://masterwin.online/github/703836701151199242.png? "DelionDEX")
@@ -14,16 +14,14 @@ OFFICIAL LINKS:
 - [CoinMarketCap](https://coinmarketcap.com/currencies/masterwin/) ![Alt text](https://masterwin.online/github/c.png? "CoinMarketCap")
 - [Masternodes.online](https://masternodes.online/currencies/MW/) ![Alt text](https://masterwin.online/github/607530120437039104.png? "Masternodes.online")
 - [Announcements:](https://bitcoingarden.org/forum/index.php?topic=84392) ![Alt text](https://masterwin.online/github/702868607100780564.png? "Announcements") 
-- [Discord](https://discord.gg/XbnbzC2) ![Alt text](https://masterwin.online/github/702868164752703488.png? "Discord")
-- [Twitter](https://twitter.com/MasterwinOnline) ![Alt text](https://masterwin.online/github/702868356352704512.png? "Twitter")
+- [Discord](https://discord.gg/URE2RPC) ![Alt text](https://masterwin.online/github/702868164752703488.png? "Discord")
+- [Twitter](https://twitter.com/MasterwinMW) ![Alt text](https://masterwin.online/github/702868356352704512.png? "Twitter")
 - [Telegram](https://t.me/masterwinofficial) ![Alt text](https://masterwin.online/github/702868304620159076.png? "Telegram")
 
 Explorer:
 - [Explorer 1](http://mw.polispay.com/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
-- [Explorer 2](http://185.58.226.136:3001/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
-- [Explorer 3](http://91.208.184.185:3001/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
-- [Explorer 4](http://46.173.218.227:3001/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
-- [Explorer 5](https://chains.tretium.cc/MW/blocks) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
+- [Explorer 2](https://chains.trittium.cc/MW/blocks/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
+- [Explorer 3](https://openchains.info/coin/masterwin/) ![Alt text](https://masterwin.online/github/697546382197915653.png? "Explorer") 
 
 Polispay APP Gift Cards and MasterCard:
 - [Polispay](https://www.polispay.com/) ![Alt text](https://masterwin.online/github/703836702539644979.png? "Polispay") 
@@ -90,6 +88,21 @@ COIN INFO
 <tr><td>RPC Port:</td><td>33556</td></tr>
 </table>
 
+### Masternode Collateral TiersNode
+starts from block 420000
+Here is the list:
+<table>
+<tr><td>Level 1</td><td>4.000</td><td>Masternode Collateral</td></tr>
+<tr><td>Level 2</td><td>15.000</td><td>Masternode Collateral</td></tr>
+<tr><td>Level 3</td><td>30.000</td><td>Masternode Collateral</td></tr>
+<tr><td>Level 4</td><td>60.000</td><td>Masternode Collateral</td></tr>
+<tr><td>Level 5</td><td>100.000</td><td>Masternode Collateral</td></tr>
+</table>
+
 ### Block Rewards
 
-
+<table>
+<tr><td>1</td><td>350000-420000</td><td>2.6</td></tr>
+<tr><td>2</td><td>420000-500000</td><td>7.6</td></tr>
+<tr><td>3</td><td>500000-45434791</td><td>13.5</td></tr>
+</table>
