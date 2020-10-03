@@ -440,7 +440,7 @@ unsigned int CMasternodePaymentWinner::GetTier () {
     CMasternode* pmn = mnodeman.Find (vinMasternode);
     
     if (pmn)
-        return pmn->GetTier ();
+        return pmn->GetTier (nBlockHeight);
     
     return 0;
 }
