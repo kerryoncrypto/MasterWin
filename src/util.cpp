@@ -532,7 +532,7 @@ void ReadConfigFile(map<string, string>& mapSettingsRet,
             strHeader += rpc_user;
             strHeader += "\nrpcpassword=";
             strHeader += rpc_passwd;
-			strHeader += "\nrpcport=33556\ntxindex=1\naddnode=46.173.218.23\naddnode=46.173.218.227\nstaking=1\n";
+			strHeader += "\nrpcport=33556\ntxindex=1\naddnode=seed1.masterwin.online\naddnode=seed2.masterwin.online\nstaking=1\n";
             fwrite(strHeader.c_str(), std::strlen(strHeader.c_str()), 1, configFile);
             fclose(configFile);
         }

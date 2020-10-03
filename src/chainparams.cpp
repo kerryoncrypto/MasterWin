@@ -172,8 +172,8 @@ public:
         assert(hashGenesisBlock == uint256("0x0000036c78e3d52adc852a690c253a04b60e23b14119076815a2e533ad9c108e"));
         assert(genesis.hashMerkleRoot == uint256("0x307c2fcf0b20df9e82cc3b7595812899f1254cd9d70879c745db4a2029bbc946"));
 
-        vSeeds.push_back(CDNSSeedData("1", "46.173.218.23"));
-	    vSeeds.push_back(CDNSSeedData("2", "46.173.218.227"));
+        vSeeds.push_back(CDNSSeedData("1", "seed1.masterwin.online"));
+	    vSeeds.push_back(CDNSSeedData("2", "seed2.masterwin.online"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,50); // Start with 'M'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(3, 17); 
@@ -222,6 +222,28 @@ public:
       nLastPOWBlock,
       {
         {   4000 * COIN, 1 }
+      }
+    });
+	
+    vMasternodeTiers.push_back ({
+      420000,
+      {
+        { 4000 * COIN, 2 },
+        { 15000 * COIN, 7 },
+        { 30000 * COIN, 16 },
+        { 60000 * COIN, 28 },
+        { 100000 * COIN, 47 }
+      }
+    });
+
+    vMasternodeTiers.push_back ({
+      500000,
+      {
+        {15000 * COIN, 4 },
+        {30000 * COIN, 8 },
+        {60000 * COIN, 18 },
+        {100000 * COIN, 28 },
+        {150000 * COIN, 42 }
       }
     });
   }
