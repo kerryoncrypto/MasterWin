@@ -73,7 +73,6 @@ COIN info:
 
 ### Coin Info
 
-COIN INFO
 <table>
 <tr><td>Coin Name:</td><td>Masterwin</td></tr>
 <tr><td>Ticker:</td><td>MW</td></tr>
