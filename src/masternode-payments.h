@@ -243,6 +243,7 @@ public:
     }
     
     unsigned int GetTier ();
+    unsigned int GetPayeeTier ();
     bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
     bool IsValid(CNode* pnode, std::string& strError);
     bool SignatureValid();
@@ -332,10 +333,14 @@ public:
         return true;
     }
     
-    bool CanVote (const COutPoint& outMasternode, unsigned int mnLevel, int nBlockHeight) {
+    bool CanVote (CMasternodePaymentWinner winner) {
+        unsigned int voteForTier = winner.GetPayeeTier ();
+        COutPoint outMasternode = winner.vinMasternode.prevout;
+        int nBlockHeight = winner.nBlockHeight;
+        
         LOCK (cs_mapMasternodePayeeVotes);
         
-        uint256 key = ((outMasternode.hash + outMasternode.n) << 4) + mnLevel;
+        uint256 key = ((outMasternode.hash + outMasternode.n) << 4) + voteForTier;
         
         if (mapMasternodesLastVote.count (key)) {
             if (mapMasternodesLastVote [key] == nBlockHeight)
