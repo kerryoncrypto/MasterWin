@@ -24,6 +24,8 @@ static const int GETHEADERS_VERSION = 70077;
 static const int MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT = 70919;
 static const int MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT = 70920;
 
+static const int MIN_PEER_PROTO_VERSION_MNW_VIN = 70920;
+
 //! masternodes older than this proto version use old strMessage format for mnannounce
 static const int MIN_PEER_MNANNOUNCE = 70915;
 
