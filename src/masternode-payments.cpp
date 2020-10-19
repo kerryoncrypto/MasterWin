@@ -821,14 +821,7 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
         return false;
     }
     
-    CMasternode* pmn = mnodeman.Find (activeMasternode.vin);
-
-    if (pmn == NULL)
-        return false;
-
-    unsigned int masternodeTier = pmn->GetTier ();
-
-    {
+    for (unsigned int masternodeTier = 1; masternodeTier <= Params ().getMasternodeTierCount (nBlockHeight + 1); masternodeTier++) {
         // Create a new winner for this level
         CMasternodePaymentWinner newWinner (activeMasternode.vin);
         
@@ -839,7 +832,7 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
         if (pmn == NULL) {
             LogPrint ("masternode", "CMasternodePayments::ProcessBlock() Failed to find masternode to pay\n");
             
-            return false;
+            continue;
         }
         
         LogPrint ("masternode", "CMasternodePayments::ProcessBlock() Found by FindOldestNotInVec\n");
