@@ -392,6 +392,9 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             if (masternodeSync.IsSynced ())
                 Misbehaving (pfrom->GetId (), 20);
             
+            if (ActiveProtocol () >= MIN_PEER_PROTO_VERSION_MNW_VIN)
+                mnodeman.AskForMN (pfrom, winner.vinPayee);
+            
             return;
         }
 
