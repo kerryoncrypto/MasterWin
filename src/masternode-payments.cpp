@@ -460,6 +460,9 @@ unsigned int CMasternodePaymentWinner::GetTier () {
 }
 
 CScript CMasternodePaymentWinner::GetPayeeScript () {
+    if (ActiveProtocol () < MIN_PEER_PROTO_VERSION_MNW_VIN)
+        return payee;
+    
     CMasternode* pmn = mnodeman.Find (vinPayee);
     
     if (pmn != NULL)
