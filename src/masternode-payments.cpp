@@ -374,7 +374,7 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
         if (pfrom->nVersion < ActiveProtocol()) return;
         
         if (winner.GetTier () == 0) {
-            LogPrintf ("CMasternodePayments::ProcessMessageMasternodePayments() : mnw - Could not find tier of masternode \n");
+            LogPrint ("mnpayments", "CMasternodePayments::ProcessMessageMasternodePayments() : mnw - Could not find tier of masternode \n");
             
             if (masternodeSync.IsSynced ())
                 Misbehaving (pfrom->GetId (), 20);
@@ -387,10 +387,10 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
         unsigned int payeeTier = winner.GetPayeeTier ();
         
         if (payeeTier == 0) {
-            LogPrintf ("CMasternodePayments::ProcessMessageMasternodePayments() : mnw - Could not find tier of payee\n");
+            LogPrint ("mnpayments", "CMasternodePayments::ProcessMessageMasternodePayments() : mnw - Could not find tier of payee %s\n", winner.GetPayeeScript ().ToAddressString ());
             
-            if (masternodeSync.IsSynced ())
-                Misbehaving (pfrom->GetId (), 20);
+            // if (masternodeSync.IsSynced ())
+            //    Misbehaving (pfrom->GetId (), 20);
             
             if (ActiveProtocol () >= MIN_PEER_PROTO_VERSION_MNW_VIN)
                 mnodeman.AskForMN (pfrom, winner.vinPayee);
@@ -460,8 +460,12 @@ unsigned int CMasternodePaymentWinner::GetTier () {
 }
 
 CScript CMasternodePaymentWinner::GetPayeeScript () {
-    if (ActiveProtocol () < MIN_PEER_PROTO_VERSION_MNW_VIN)
+    if (ActiveProtocol () < MIN_PEER_PROTO_VERSION_MNW_VIN) {
+        if (payee == CScript ())
+            LogPrint ("mnpayments", "CMasternodePaymentWinner::GetPayeeScript() : returning empty CScript\n");
+        
         return payee;
+    }
     
     CMasternode* pmn = mnodeman.Find (vinPayee);
     
@@ -473,6 +477,8 @@ CScript CMasternodePaymentWinner::GetPayeeScript () {
     
     if (GetTransaction (vinPayee.prevout.hash, prevTx, hashBlock, true))
         return prevTx.vout [vinPayee.prevout.n].scriptPubKey;
+    
+    LogPrint ("mnpayments", "CMasternodePaymentWinner::GetPayeeScript() : Failed to get payee's CScript\n");
     
     return CScript ();
 }
@@ -860,8 +866,6 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
             
             continue;
         }
-        
-        LogPrint ("masternode", "CMasternodePayments::ProcessBlock() Found by FindOldestNotInVec\n");
         
         newWinner.nBlockHeight = nBlockHeight;
         newWinner.AddPayee (pmn->vin);
